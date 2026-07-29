@@ -34,16 +34,12 @@ import { DerivAuth } from "@/components/deriv-auth"
 import { AutoBotTab } from "@/components/tabs/autobot-tab"
 import { AutomatedTab } from "@/components/tabs/automated-tab"
 import { SmartAuto24Tab } from "@/components/tabs/smartauto24-tab"
-import { ProfitPlusTabV2 } from "@/components/tabs/profit-plus-tab-v2"
-import { ProfitPlusRebuild } from "@/components/tabs/profit-plus-rebuild"
 import { AdvancedSignalsTab } from "@/components/advanced-signals-tab"
 import { useGlobalTradingContext } from "@/hooks/use-global-trading-context"
 import { verifier } from "@/lib/system-verifier"
 import { ResponsiveTabs } from "@/components/responsive-tabs"
-import { MoneyMakerTab } from "@/components/tabs/money-maker-tab"
 import type { Variants } from 'framer-motion';
 import { ToolsInfoTab } from "@/components/tabs/tools-info-tab"
-import SmartAdaptiveTradingTab from "@/components/tabs/smart-adaptive-trading"
 import { RiskDisclaimerModal } from "@/components/modals/risk-disclaimer-modal"
 import { MarketSelector } from "@/components/market-selector"
 
@@ -77,6 +73,7 @@ export default function DerivAnalysisApp() {
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false)
   const [showRiskModal, setShowRiskModal] = useState(false)
   const [showAIScanner, setShowAIScanner] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const [siteConfig, setSiteConfig] = useState<any>(null)
   const [watchedDigits, setWatchedDigits] = useState<number[]>(() => {
@@ -148,11 +145,7 @@ export default function DerivAnalysisApp() {
       setInitError(error instanceof Error ? error.message : "Unknown error")
     }
 
-    // Check for risk acceptance
-    const accepted = localStorage.getItem("deriv_risk_accepted")
-    if (!accepted) {
-      setShowRiskModal(true)
-    }
+    // Risk modal is hidden on load, user can manually open it from header
 
     // Fetch site config
     fetch("/api/admin/site-config")
@@ -222,6 +215,76 @@ export default function DerivAnalysisApp() {
           >
             <div className="mx-auto w-full px-2 sm:px-6 lg:px-8">
               <div className="flex flex-nowrap items-center h-16 sm:h-20 gap-4 sm:gap-6 w-full justify-between overflow-hidden">
+
+                {/* Left Sidebar Toggle */}
+                <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+                  <SheetTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-9 w-9 rounded-lg transition-all hidden sm:flex ${
+                        theme === "dark" 
+                          ? "bg-white/5 text-white hover:bg-white/10" 
+                          : "bg-black/5 text-slate-900 hover:bg-black/10"
+                      }`}
+                    >
+                      <Menu className="h-5 w-5" />
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent
+                    side="left"
+                    className={`w-64 border-r overflow-y-auto ${
+                      theme === "dark" 
+                        ? "bg-[#0b0f19] text-white border-white/10" 
+                        : "bg-white text-slate-900 border-slate-200"
+                    } p-0`}
+                  >
+                    <div className="p-6 border-b border-white/5">
+                      <SheetTitle className={theme === "dark" ? "text-white text-xl font-black uppercase tracking-tight" : "text-slate-900 text-xl font-black uppercase tracking-tight"}>
+                        Navigation
+                      </SheetTitle>
+                    </div>
+                    
+                    {/* Navigation tabs in sidebar */}
+                    <div className="flex flex-col gap-2 p-4">
+                      {[
+                        { id: "smart-analysis", label: "Smart Analysis", icon: LineChart },
+                        { id: "smartauto24", label: "SmartAuto24", icon: Sparkles },
+                        { id: "autobot", label: "Auto Bot", icon: Cpu },
+                        { id: "automated", label: "Automated", icon: Terminal },
+                        { id: "signals-hub", label: "Signals Hub", icon: Flame },
+                        { id: "even-odd", label: "Even/Odd", icon: Hash },
+                        { id: "over-under", label: "Over/Under", icon: ArrowUpDown },
+                        { id: "advanced-over-under", label: "Advanced Over/Under", icon: Percent },
+                        { id: "matches", label: "Matches", icon: CheckSquare },
+                        { id: "differs", label: "Differs", icon: XCircle },
+                        { id: "ai-analysis", label: "AI Analysis", icon: BrainCircuit },
+                        { id: "tools-info", label: "Tools Info", icon: HelpCircle },
+                      ].map(({ id, label, icon: IconComponent }) => (
+                        <Button
+                          key={id}
+                          variant={activeTab === id ? "default" : "ghost"}
+                          className={`justify-start gap-3 h-10 ${
+                            activeTab === id
+                              ? theme === "dark"
+                                ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                                : "bg-indigo-600 text-white hover:bg-indigo-700"
+                              : theme === "dark"
+                                ? "text-slate-300 hover:bg-white/5"
+                                : "text-slate-600 hover:bg-slate-100"
+                          }`}
+                          onClick={() => {
+                            setActiveTab(id)
+                            setSidebarOpen(false)
+                          }}
+                        >
+                          <IconComponent className="h-4 w-4" />
+                          <span className="text-sm font-semibold">{label}</span>
+                        </Button>
+                      ))}
+                    </div>
+                  </SheetContent>
+                </Sheet>
 
                 {/* Brand Name - Profithub Logo */}
                 <div className="flex items-center shrink-0 gap-2.5 sm:min-w-[220px]">
@@ -356,11 +419,8 @@ export default function DerivAnalysisApp() {
                     <div className="overflow-x-auto no-scrollbar flex">
                       <ResponsiveTabs theme={theme} value={activeTab} onValueChange={setActiveTab}>
                         {[
-                          "smart-adaptive",
                           "smart-analysis",
                           "smartauto24",
-                          "profit-plus",
-                          "money-maker",
                           "autobot",
                           "automated",
                           "signals-hub",
@@ -373,11 +433,8 @@ export default function DerivAnalysisApp() {
                           "tools-info",
                         ].filter(tab => !siteConfig?.hiddenTabs?.includes(tab)).map((tab) => {
                           const tabLabels: Record<string, string> = {
-                            "smart-adaptive": "Smart Adaptive",
                             "smart-analysis": "Smart Analysis",
                             "smartauto24": "SmartAuto24",
-                            "profit-plus": "ProfitPlus",
-                            "money-maker": "Money Maker",
                             "autobot": "Auto Bot",
                             "automated": "Automated",
                             "signals-hub": "Signals Hub",
@@ -390,11 +447,8 @@ export default function DerivAnalysisApp() {
                             "tools-info": "Tools Info"
                           }
                           const tabIcons: Record<string, any> = {
-                            "smart-adaptive": Sliders,
                             "smart-analysis": LineChart,
                             "smartauto24": Sparkles,
-                            "profit-plus": TrendingUp,
-                            "money-maker": TrendingUp,
                             "autobot": Cpu,
                             "automated": Terminal,
                             "signals-hub": Flame,
@@ -791,25 +845,6 @@ export default function DerivAnalysisApp() {
                   maxTicks={maxTicks}
                   onMaxTicksChange={changeMaxTicks}
                 />
-              </TabsContent>
-
-              <TabsContent value="profit-plus" className="mt-0">
-                <ProfitPlusRebuild />
-              </TabsContent>
-
-
-              <TabsContent value="money-maker" className="mt-0">
-                <MoneyMakerTab
-                  theme={theme}
-                  symbol={symbol}
-                  onSymbolChange={changeSymbol}
-                  availableSymbols={availableSymbols}
-                  recentDigits={recent100Digits}
-                />
-              </TabsContent>
-
-              <TabsContent value="smart-adaptive" className="mt-0">
-                {analysis && <SmartAdaptiveTradingTab signals={signals} analysis={analysis} symbol={symbol} theme={theme} currentPrice={currentPrice} currentDigit={currentDigit} tickCount={tickCount} />}
               </TabsContent>
 
               <TabsContent value="tools-info" className="mt-0">
