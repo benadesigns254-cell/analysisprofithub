@@ -56,47 +56,43 @@ export function SignalsHubTab({
     <div className="space-y-6">
       <div className="grid gap-4 lg:grid-cols-4">
         <Card className={`p-4 rounded-3xl border ${theme === "dark" ? "bg-slate-950/80 border-white/10" : "bg-white border-slate-200"}`}>
-          <div className="flex items-center gap-3 mb-3">
+          <div className="flex items-center gap-3">
             <Sparkles className="w-5 h-5 text-cyan-400" />
             <div>
               <p className="text-xs uppercase tracking-[0.3em] font-black text-slate-400">Standard Signals</p>
               <p className="text-2xl font-black text-white">{activeSignals.length}</p>
             </div>
           </div>
-          <p className="text-sm text-slate-400">Active market signals across standard and premium feeds.</p>
         </Card>
 
         <Card className={`p-4 rounded-3xl border ${theme === "dark" ? "bg-slate-950/80 border-white/10" : "bg-white border-slate-200"}`}>
-          <div className="flex items-center gap-3 mb-3">
+          <div className="flex items-center gap-3">
             <ShieldCheck className="w-5 h-5 text-amber-400" />
             <div>
               <p className="text-xs uppercase tracking-[0.3em] font-black text-slate-400">Pro Signals</p>
               <p className="text-2xl font-black text-white">{proSignalCount}</p>
             </div>
           </div>
-          <p className="text-sm text-slate-400">Premium trade ideas optimized for high-probability setups.</p>
         </Card>
 
         <Card className={`p-4 rounded-3xl border ${theme === "dark" ? "bg-slate-950/80 border-white/10" : "bg-white border-slate-200"}`}>
-          <div className="flex items-center gap-3 mb-3">
+          <div className="flex items-center gap-3">
             <Activity className="w-5 h-5 text-emerald-400" />
             <div>
               <p className="text-xs uppercase tracking-[0.3em] font-black text-slate-400">Super Signals</p>
               <p className="text-2xl font-black text-white">{availableMarketCount}</p>
             </div>
           </div>
-          <p className="text-sm text-slate-400">Live market scan coverage for synthetic, derived, and high-volatility assets.</p>
         </Card>
 
         <Card className={`p-4 rounded-3xl border ${theme === "dark" ? "bg-slate-950/80 border-white/10" : "bg-white border-slate-200"}`}>
-          <div className="flex items-center gap-3 mb-3">
+          <div className="flex items-center gap-3">
             <Layers className="w-5 h-5 text-violet-400" />
             <div>
               <p className="text-xs uppercase tracking-[0.3em] font-black text-slate-400">Advanced Scan</p>
               <p className="text-2xl font-black text-white">{advancedScanCount}</p>
             </div>
           </div>
-          <p className="text-sm text-slate-400">Deep market analytics and AI-driven pattern discovery.</p>
         </Card>
       </div>
 
@@ -104,7 +100,6 @@ export function SignalsHubTab({
         <div className="flex flex-col gap-3 p-4 border-b border-white/10 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-lg font-black text-white">Signals Hub</h2>
-            <p className="text-sm text-slate-400">One place for standard, pro, super and advanced signal feeds.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Badge className="rounded-full bg-cyan-500/15 text-cyan-200 border border-cyan-500/20">{tradeNowCount} Trade Now</Badge>
