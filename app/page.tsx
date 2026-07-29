@@ -26,7 +26,6 @@ import { DiffersTab } from "@/components/tabs/differs-tab"
 import { StatisticalAnalysis } from "@/components/statistical-analysis"
 import { LastDigitsChart } from "@/components/charts/last-digits-chart"
 import { LastDigitsLineChart } from "@/components/charts/last-digits-line-chart"
-import { AIAnalysisTab } from "@/components/tabs/ai-analysis-tab"
 import { HeritageSuperSignals } from "@/components/heritage-super-signals"
 import { SuperSignalsTab } from "@/components/tabs/super-signals-tab"
 import { LoadingScreen } from "@/components/loading-screen"
@@ -39,7 +38,6 @@ import { useGlobalTradingContext } from "@/hooks/use-global-trading-context"
 import { verifier } from "@/lib/system-verifier"
 import { ResponsiveTabs } from "@/components/responsive-tabs"
 import type { Variants } from 'framer-motion';
-import { ToolsInfoTab } from "@/components/tabs/tools-info-tab"
 import { RiskDisclaimerModal } from "@/components/modals/risk-disclaimer-modal"
 import { MarketSelector } from "@/components/market-selector"
 
@@ -245,6 +243,35 @@ export default function DerivAnalysisApp() {
                       </SheetTitle>
                     </div>
                     
+                    {/* Quick Actions */}
+                    <div className="p-4 border-b border-white/5 flex flex-col gap-2">
+                      <Link href="/account" className="w-full">
+                        <Button
+                          variant="ghost"
+                          className={`justify-start gap-3 w-full ${
+                            theme === "dark"
+                              ? "text-slate-300 hover:bg-white/5"
+                              : "text-slate-600 hover:bg-slate-100"
+                          }`}
+                        >
+                          <User className="h-4 w-4" />
+                          <span className="text-sm font-semibold">Account</span>
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        className={`justify-start gap-3 w-full ${
+                          theme === "dark"
+                            ? "text-slate-300 hover:bg-white/5"
+                            : "text-slate-600 hover:bg-slate-100"
+                        }`}
+                        onClick={() => setShowRiskModal(true)}
+                      >
+                        <AlertTriangle className="h-4 w-4" />
+                        <span className="text-sm font-semibold">Risk</span>
+                      </Button>
+                    </div>
+
                     {/* Navigation tabs in sidebar */}
                     <div className="flex flex-col gap-2 p-4">
                       {[
@@ -258,8 +285,6 @@ export default function DerivAnalysisApp() {
                         { id: "advanced-over-under", label: "Advanced Over/Under", icon: Percent },
                         { id: "matches", label: "Matches", icon: CheckSquare },
                         { id: "differs", label: "Differs", icon: XCircle },
-                        { id: "ai-analysis", label: "AI Analysis", icon: BrainCircuit },
-                        { id: "tools-info", label: "Tools Info", icon: HelpCircle },
                       ].map(({ id, label, icon: IconComponent }) => (
                         <Button
                           key={id}
@@ -312,30 +337,6 @@ export default function DerivAnalysisApp() {
 
                 <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                   <div className="hidden sm:flex items-center gap-2">
-                    <Link href="/account">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={`h-8 px-3 text-[10px] rounded-lg font-bold flex items-center gap-1.5 transition-all ${theme === "dark"
-                          ? "bg-slate-800/50 text-slate-300 border border-slate-700/50 hover:bg-blue-600 hover:text-white"
-                          : "bg-gray-100 text-slate-700 hover:bg-blue-500 hover:text-white"}`}
-                      >
-                        <User className="h-3.5 w-3.5" />
-                        Account
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowRiskModal(true)}
-                      className={`h-8 px-3 text-[10px] rounded-lg font-bold flex items-center gap-1 transition-all ${theme === "dark"
-                        ? "bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20"
-                        : "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100"}`}
-                    >
-                      <AlertTriangle className="h-3.5 w-3.5" />
-                      Risk
-                    </Button>
-                    <LiveChat />
                     <Button
                       variant="ghost"
                       size="icon"
@@ -350,68 +351,12 @@ export default function DerivAnalysisApp() {
                   </div>
 
                   <DerivAuth theme={theme} />
-
-                  {/* Unified Hamburger Sheet containing Dashboard and mobile links */}
-                  <div className="flex items-center">
-                    <Sheet>
-                      <SheetTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className={`h-9 w-9 rounded-lg transition-all ${
-                            theme === "dark" 
-                              ? "bg-white/5 text-white hover:bg-white/10" 
-                              : "bg-black/5 text-slate-900 hover:bg-black/10"
-                          }`}
-                        >
-                          <Menu className="h-5 w-5" />
-                        </Button>
-                      </SheetTrigger>
-                      <SheetContent
-                        side="right"
-                        className={`w-full sm:max-w-2xl border-l overflow-y-auto ${
-                          theme === "dark" 
-                            ? "bg-[#0b0f19] text-white border-white/10" 
-                            : "bg-white text-slate-900 border-slate-200"
-                        } p-0`}
-                      >
-                        <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                          <SheetTitle className={theme === "dark" ? "text-white text-xl font-black uppercase tracking-tight" : "text-slate-900 text-xl font-black uppercase tracking-tight"}>
-                            Mobile Menu
-                          </SheetTitle>
-                        </div>
-                        
-                        {/* Mobile quick actions at the top of the sidebar */}
-                        <div className="sm:hidden grid grid-cols-2 gap-2 p-4 border-b border-white/5 bg-slate-950/25">
-                          <Link href="/account" className="col-span-2">
-                            <Button variant="outline" size="sm" className="w-full text-[10px] font-bold h-8">
-                              <User className="h-3 w-3 mr-1" /> Account
-                            </Button>
-                          </Link>
-                          <Button variant="outline" size="sm" onClick={() => setShowRiskModal(true)} className="w-full text-[10px] font-bold h-8">
-                            <AlertTriangle className="h-3 w-3 mr-1" /> Risk
-                          </Button>
-                          <Button variant="outline" size="sm" onClick={() => setShowAIScanner(true)} className="w-full text-[10px] font-bold h-8">
-                            <Cpu className="h-3 w-3 mr-1" /> AI Scanner
-                          </Button>
-                          <div className="w-full">
-                            <LiveChat />
-                          </div>
-                          <Button variant="outline" size="sm" onClick={toggleTheme} className="w-full text-[10px] font-bold h-8">
-                            {theme === "dark" ? <Sun className="h-3 w-3 mr-1" /> : <Moon className="h-3.5 w-3.5 mr-1" />} Theme
-                          </Button>
-                        </div>
-
-
-                      </SheetContent>
-                    </Sheet>
-                  </div>
                 </div>
               </div>
 
               <div className="px-2 sm:px-6 lg:px-8 flex flex-col gap-2 pb-2">
-                {/* Navigation Tabs - Clean Design */}
-                <div className="flex items-center justify-start w-full overflow-x-auto no-scrollbar -mx-2 sm:-mx-6 lg:-mx-8 px-2 sm:px-6 lg:px-8 py-1">
+                {/* Navigation Tabs - Hidden on Desktop */}
+                <div className="sm:hidden flex items-center justify-start w-full overflow-x-auto no-scrollbar -mx-2 px-2 py-1">
                   <div className={`inline-flex rounded-2xl border transition-all duration-500 p-1 gap-1.5 ${theme === "dark" 
                     ? "bg-slate-950/45 border-white/5 shadow-inner backdrop-blur-md" 
                     : "bg-slate-100/80 border-slate-200 shadow-xs backdrop-blur-md"
@@ -429,8 +374,6 @@ export default function DerivAnalysisApp() {
                           "advanced-over-under",
                           "matches",
                           "differs",
-                          "ai-analysis",
-                          "tools-info",
                         ].filter(tab => !siteConfig?.hiddenTabs?.includes(tab)).map((tab) => {
                           const tabLabels: Record<string, string> = {
                             "smart-analysis": "Smart Analysis",
@@ -443,8 +386,6 @@ export default function DerivAnalysisApp() {
                             "advanced-over-under": "Advanced Over/Under",
                             "matches": "Matches",
                             "differs": "Differs",
-                            "ai-analysis": "AI Analysis",
-                            "tools-info": "Tools Info"
                           }
                           const tabIcons: Record<string, any> = {
                             "smart-analysis": LineChart,
@@ -457,8 +398,6 @@ export default function DerivAnalysisApp() {
                             "advanced-over-under": Percent,
                             "matches": CheckSquare,
                             "differs": XCircle,
-                            "ai-analysis": BrainCircuit,
-                            "tools-info": HelpCircle
                           }
                           const IconComponent = tabIcons[tab]
                           return (
@@ -814,20 +753,6 @@ export default function DerivAnalysisApp() {
                 )}
               </TabsContent>
 
-              <TabsContent value="ai-analysis" className="mt-0">
-                {analysis && (
-                  <AIAnalysisTab
-                    analysis={analysis}
-                    currentDigit={currentDigit}
-                    currentPrice={currentPrice}
-                    symbol={symbol}
-                    theme={theme}
-                    availableSymbols={availableSymbols}
-                    onSymbolChange={changeSymbol}
-                  />
-                )}
-              </TabsContent>
-
               <TabsContent value="autobot" className="mt-0">
                 <AutoBotTab theme={theme} symbol={symbol} />
               </TabsContent>
@@ -847,9 +772,6 @@ export default function DerivAnalysisApp() {
                 />
               </TabsContent>
 
-              <TabsContent value="tools-info" className="mt-0">
-                <ToolsInfoTab theme={theme} connectionLogs={connectionLogs} />
-              </TabsContent>
             </>
           )}
         </main>
