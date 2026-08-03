@@ -270,6 +270,18 @@ export default function DerivAnalysisApp() {
                         <AlertTriangle className="h-4 w-4" />
                         <span className="text-sm font-semibold">Risk</span>
                       </Button>
+                      <Button
+                        variant="ghost"
+                        className={`justify-start gap-3 w-full ${
+                          theme === "dark"
+                            ? "text-slate-300 hover:bg-white/5"
+                            : "text-slate-600 hover:bg-slate-100"
+                        }`}
+                        onClick={toggleTheme}
+                      >
+                        {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                        <span className="text-sm font-semibold">{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+                      </Button>
                     </div>
 
                     {/* Navigation tabs in sidebar */}
@@ -335,19 +347,12 @@ export default function DerivAnalysisApp() {
 
                 <div className="flex-1" />
 
-                <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                  <div className="hidden sm:flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={toggleTheme}
-                      className={`h-8 w-8 rounded-lg transition-all ${theme === "dark"
-                        ? "bg-white/5 text-yellow-500 hover:bg-white/10"
-                        : "bg-black/5 text-slate-700 hover:bg-black/10"
-                        }`}
-                    >
-                      {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-                    </Button>
+                <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+                  {/* Network Status Bars */}
+                  <div className="flex items-center gap-1">
+                    <div className={`h-3 w-1 rounded-sm transition-all ${theme === "dark" ? "bg-green-500/60" : "bg-green-600/60"}`} />
+                    <div className={`h-4 w-1 rounded-sm transition-all ${theme === "dark" ? "bg-green-500/80" : "bg-green-600/80"}`} />
+                    <div className={`h-5 w-1 rounded-sm transition-all ${theme === "dark" ? "bg-green-500" : "bg-green-600"}`} />
                   </div>
 
                   <DerivAuth theme={theme} />
@@ -563,14 +568,6 @@ export default function DerivAnalysisApp() {
                 </div>
               )}
               <TabsContent value="smart-analysis" className="mt-0 space-y-2 sm:space-y-3 md:space-y-4">
-                <div
-                  className={`rounded-lg sm:rounded-xl p-2 sm:p-3 border flex items-center justify-between ${theme === "dark" ? "bg-linear-to-br from-[#0f1629]/80 to-[#1a2235]/80 border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.2)]" : "bg-white border-gray-200 shadow-lg"}`}
-                >
-                  <div className="flex items-center gap-2">
-                    <div className={`h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse`} />
-                    <span className={`text-[10px] font-bold uppercase ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>Market Live</span>
-                  </div>
-                </div>
 
                 {analysis && analysis.digitFrequencies && (
                   <div
