@@ -324,20 +324,10 @@ export default function DerivAnalysisApp() {
                 </Sheet>
 
                 {/* Brand Name - Profithub Logo */}
-                <div className="flex items-center shrink-0 gap-1.5">
-                  <div className={`p-1 rounded-lg flex items-center justify-center shrink-0 ${theme === "dark" ? "bg-green-500/10" : "bg-green-50"}`}>
-                    <Image
-                      src="/logo-profithub.png"
-                      alt="Profithub"
-                      width={16}
-                      height={16}
-                      style={{ objectFit: "contain" }}
-                      priority
-                    />
+                <div className="flex items-center shrink-0 gap-0.5">
+                  <div className={`p-0.5 rounded-md flex items-center justify-center shrink-0 ${theme === "dark" ? "bg-green-500/10" : "bg-green-50"}`}>
+                    <PHLogo size={12} className={theme === "dark" ? "text-green-400" : "text-green-600"} />
                   </div>
-                  <h1 className={`text-sm font-black tracking-tight uppercase bg-gradient-to-r from-green-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent`}>
-                    Profithub
-                  </h1>
                 </div>
 
                 <div className="flex-1" />
@@ -418,23 +408,23 @@ export default function DerivAnalysisApp() {
                 </ResponsiveTabs>
               </div>
 
-              {/* Floating Market Selection */}
-              {availableSymbols.length > 0 && (
-                <div className={`absolute left-1 top-8 sm:left-2 sm:top-10 z-20 flex items-center gap-1 px-1.5 py-1 rounded-md border shrink-0 ${theme === "dark"
-                  ? "bg-black/60 border-white/10 backdrop-blur-md"
-                  : "bg-white/80 border-gray-200 backdrop-blur-sm"
-                  }`}>
-                  <MarketSelector
-                    symbols={availableSymbols}
-                    currentSymbol={symbol}
-                    onSymbolChange={changeSymbol}
-                    theme={theme}
-                  />
-                </div>
-              )}
-
               {/* Market Info Bar - Single Row Horizontal */}
               <div className="flex items-center gap-0.5 px-0.5 py-0.5 overflow-x-auto no-scrollbar">
+                {/* Market Selection */}
+                {availableSymbols.length > 0 && (
+                  <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
+                    ? "bg-white/[0.03] border-white/10"
+                    : "bg-gray-50 border-gray-200"
+                    }`}>
+                    <MarketSelector
+                      symbols={availableSymbols}
+                      currentSymbol={symbol}
+                      onSymbolChange={changeSymbol}
+                      theme={theme}
+                    />
+                  </div>
+                )}
+
                 {/* Price */}
                 <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
                   ? "bg-white/[0.03] border-white/10"
