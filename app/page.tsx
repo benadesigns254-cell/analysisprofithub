@@ -418,58 +418,55 @@ export default function DerivAnalysisApp() {
                 </ResponsiveTabs>
               </div>
 
-              {/* Market Info Bar - Single Row Horizontal */}
-              <div className="flex items-center gap-1 px-1 py-1 overflow-x-auto no-scrollbar">
-                {/* Market Selection */}
-                {availableSymbols.length > 0 && (
-                  <div className={`flex items-center gap-2 px-2 h-8 rounded-lg border shrink-0 ${theme === "dark"
-                    ? "bg-white/[0.03] border-white/10"
-                    : "bg-gray-50 border-gray-200"
-                    }`}>
-                    <MarketSelector
-                      symbols={availableSymbols}
-                      currentSymbol={symbol}
-                      onSymbolChange={changeSymbol}
-                      theme={theme}
-                    />
-                  </div>
-                )}
+              {/* Floating Market Selection */}
+              {availableSymbols.length > 0 && (
+                <div className={`absolute left-1 top-8 sm:left-2 sm:top-10 z-20 flex items-center gap-1 px-1.5 py-1 rounded-md border shrink-0 ${theme === "dark"
+                  ? "bg-black/60 border-white/10 backdrop-blur-md"
+                  : "bg-white/80 border-gray-200 backdrop-blur-sm"
+                  }`}>
+                  <MarketSelector
+                    symbols={availableSymbols}
+                    currentSymbol={symbol}
+                    onSymbolChange={changeSymbol}
+                    theme={theme}
+                  />
+                </div>
+              )}
 
+              {/* Market Info Bar - Single Row Horizontal */}
+              <div className="flex items-center gap-0.5 px-0.5 py-0.5 overflow-x-auto no-scrollbar">
                 {/* Price */}
-                <div className={`flex items-center gap-1.5 px-2 h-8 rounded-lg border shrink-0 ${theme === "dark"
+                <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
                   ? "bg-white/[0.03] border-white/10"
                   : "bg-gray-50 border-gray-200"
                   }`}>
-                  <span className={`text-[7px] font-bold opacity-60 ${theme === "dark" ? "text-cyan-400" : "text-cyan-600"}`}>PRICE</span>
-                  <span className={`text-sm font-black tabular-nums ${theme === "dark" ? "text-cyan-400" : "text-cyan-600"}`}>
-                    {currentPrice?.toFixed(5) || "0.00000"}
+                  <span className={`text-xs font-black tabular-nums ${theme === "dark" ? "text-cyan-400" : "text-cyan-600"}`}>
+                    {currentPrice?.toFixed(4) || "0.0000"}
                   </span>
                 </div>
 
                 {/* Last Digit */}
-                <div className={`flex items-center gap-1.5 px-2 h-8 rounded-lg border shrink-0 ${theme === "dark"
+                <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
                   ? "bg-orange-500/[0.08] border-orange-500/30"
                   : "bg-orange-50 border-orange-200"
                   }`}>
-                  <span className={`text-[7px] font-bold opacity-60 ${theme === "dark" ? "text-orange-400" : "text-orange-600"}`}>DIGIT</span>
-                  <span className={`text-lg font-black ${theme === "dark" ? "text-orange-400" : "text-orange-600"}`}>
+                  <span className={`text-sm font-black ${theme === "dark" ? "text-orange-400" : "text-orange-600"}`}>
                     {currentDigit ?? "0"}
                   </span>
                 </div>
 
                 {/* Ticks */}
-                <div className={`flex items-center gap-1.5 px-2 h-8 rounded-lg border shrink-0 ${theme === "dark"
+                <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
                   ? "bg-white/[0.03] border-white/10"
                   : "bg-gray-50 border-gray-200"
                   }`}>
-                  <span className={`text-[7px] font-bold opacity-60 ${theme === "dark" ? "text-emerald-400" : "text-emerald-600"}`}>TICKS</span>
-                  <span className={`text-sm font-black tabular-nums ${theme === "dark" ? "text-emerald-400" : "text-emerald-600"}`}>
+                  <span className={`text-xs font-black tabular-nums ${theme === "dark" ? "text-emerald-400" : "text-emerald-600"}`}>
                     {(tickCount || 0).toLocaleString()}
                   </span>
                   <select
                     value={maxTicks}
                     onChange={(e) => changeMaxTicks(Number(e.target.value))}
-                    className={`bg-transparent text-[8px] font-black focus:outline-hidden cursor-pointer appearance-none ml-0.5 ${theme === "dark" ? "text-slate-300" : "text-slate-700"}`}
+                    className={`bg-transparent text-[7px] font-black focus:outline-hidden cursor-pointer appearance-none ml-0.5 ${theme === "dark" ? "text-slate-300" : "text-slate-700"}`}
                   >
                     {[25, 60, 100, 250, 500, 1000, 2500, 5000].map(v => (
                       <option key={v} value={v} className={theme === "dark" ? "bg-slate-900 text-white" : "bg-white text-slate-900"}>{v}</option>
@@ -478,15 +475,15 @@ export default function DerivAnalysisApp() {
                 </div>
 
                 {/* Watch */}
-                <div className={`flex items-center gap-1 px-2 h-8 rounded-lg border shrink-0 ${theme === "dark"
+                <div className={`flex items-center gap-0.5 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
                   ? "bg-white/[0.03] border-white/10"
                   : "bg-gray-50 border-gray-200"
                   }`}>
-                  <Eye className="h-3 w-3 text-amber-500 shrink-0" />
+                  <Eye className="h-2.5 w-2.5 text-amber-500 shrink-0" />
                   <input
                     type="text"
                     placeholder="D"
-                    className={`bg-transparent text-[8px] font-black w-[20px] focus:outline-hidden text-center placeholder:text-slate-600 ${theme === "dark" ? "text-slate-300" : "text-slate-700"}`}
+                    className={`bg-transparent text-[7px] font-black w-[18px] focus:outline-hidden text-center placeholder:text-slate-600 ${theme === "dark" ? "text-slate-300" : "text-slate-700"}`}
                     value={watchedDigits.join(',')}
                     onChange={(e) => {
                       const val = e.target.value;
