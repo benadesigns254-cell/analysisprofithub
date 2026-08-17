@@ -37,6 +37,7 @@ import { AdvancedSignalsTab } from "@/components/advanced-signals-tab"
 import { useGlobalTradingContext } from "@/hooks/use-global-trading-context"
 import { verifier } from "@/lib/system-verifier"
 import { ResponsiveTabs } from "@/components/responsive-tabs"
+import { PHLogo } from "@/components/ph-logo"
 import type { Variants } from 'framer-motion';
 import { RiskDisclaimerModal } from "@/components/modals/risk-disclaimer-modal"
 import { MarketSelector } from "@/components/market-selector"
