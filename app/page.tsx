@@ -37,7 +37,6 @@ import { AdvancedSignalsTab } from "@/components/advanced-signals-tab"
 import { useGlobalTradingContext } from "@/hooks/use-global-trading-context"
 import { verifier } from "@/lib/system-verifier"
 import { ResponsiveTabs } from "@/components/responsive-tabs"
-import { PHLogo } from "@/components/ph-logo"
 import type { Variants } from 'framer-motion';
 import { RiskDisclaimerModal } from "@/components/modals/risk-disclaimer-modal"
 import { MarketSelector } from "@/components/market-selector"
@@ -324,13 +323,6 @@ export default function DerivAnalysisApp() {
                   </SheetContent>
                 </Sheet>
 
-                {/* Brand Name - Profithub Logo */}
-                <div className="flex items-center shrink-0 gap-0.5">
-                  <div className={`p-0.5 rounded-md flex items-center justify-center shrink-0 ${theme === "dark" ? "bg-green-500/10" : "bg-green-50"}`}>
-                    <PHLogo size={12} className={theme === "dark" ? "text-green-400" : "text-green-600"} />
-                  </div>
-                </div>
-
                 <div className="flex-1" />
 
                 <div className="flex items-center gap-2 shrink-0">
@@ -345,7 +337,7 @@ export default function DerivAnalysisApp() {
                 </div>
               </div>
 
-              <div className="px-1 sm:px-3 flex items-center justify-start gap-1 py-1 overflow-x-auto no-scrollbar">
+              <div className="px-1 sm:px-3 flex items-center justify-start gap-1 py-2.5 overflow-x-auto no-scrollbar text-[#1147b9]">
                 {/* Navigation Tabs */}
                 <ResponsiveTabs theme={theme} value={activeTab} onValueChange={setActiveTab}>
                         {[
@@ -391,8 +383,12 @@ export default function DerivAnalysisApp() {
                             value={tab}
                             className={`shrink-0 rounded-lg text-[9px] h-7 px-2.5 whitespace-nowrap transition-all duration-300 font-semibold flex items-center gap-1 border-0 ${activeTab === tab
                               ? theme === "dark"
-                                ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20"
-                                : "bg-indigo-600 text-white shadow-sm shadow-indigo-500/10"
+                                ? tab === "signals-hub"
+                                  ? "bg-indigo-600 text-[#ff9006] font-bold shadow-md shadow-indigo-500/20"
+                                  : "bg-indigo-600 text-white shadow-md shadow-indigo-500/20"
+                                : tab === "signals-hub"
+                                  ? "bg-indigo-600 text-[#ff9006] font-bold shadow-sm shadow-indigo-500/10"
+                                  : "bg-indigo-600 text-white shadow-sm shadow-indigo-500/10"
                               : theme === "dark"
                                 ? "text-slate-400 hover:text-white hover:bg-white/5"
                                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -402,7 +398,7 @@ export default function DerivAnalysisApp() {
                             }}
                           >
                             {IconComponent && <IconComponent className="h-3 w-3 shrink-0" />}
-                            <span className="hidden sm:inline">{tabLabels[tab] || tab}</span>
+                            <span className={`hidden sm:inline ${tab === "over-under" ? "text-white" : ""}`}>{tabLabels[tab] || tab}</span>
                           </TabsTrigger>
                         )
                         })}

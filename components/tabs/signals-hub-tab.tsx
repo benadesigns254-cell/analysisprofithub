@@ -1,11 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Sparkles, ShieldCheck, Activity, Layers } from "lucide-react"
 import type { Signal, AnalysisResult } from "@/lib/analysis-engine"
 import type { DerivSymbol } from "@/hooks/use-deriv"
 import { SignalsTab } from "@/components/tabs/signals-tab"
@@ -46,76 +43,17 @@ export function SignalsHubTab({
 }: SignalsHubTabProps) {
   const [activeSection, setActiveSection] = useState<string>("standard")
 
-  const activeSignals = signals.filter((signal) => signal.status !== "NEUTRAL")
-  const tradeNowCount = activeSignals.filter((signal) => signal.status === "TRADE NOW").length
-  const proSignalCount = proSignals.length
-  const availableMarketCount = availableSymbols.length
-  const advancedScanCount = analysis ? analysis.digitFrequencies?.length ?? 0 : 0
 
   return (
-    <div className="space-y-6">
-      <div className="grid gap-4 lg:grid-cols-4">
-        <Card className={`p-4 rounded-3xl border ${theme === "dark" ? "bg-slate-950/80 border-white/10" : "bg-white border-slate-200"}`}>
-          <div className="flex items-center gap-3">
-            <Sparkles className="w-5 h-5 text-cyan-400" />
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] font-black text-slate-400">Standard Signals</p>
-              <p className="text-2xl font-black text-white">{activeSignals.length}</p>
-            </div>
-          </div>
-        </Card>
-
-        <Card className={`p-4 rounded-3xl border ${theme === "dark" ? "bg-slate-950/80 border-white/10" : "bg-white border-slate-200"}`}>
-          <div className="flex items-center gap-3">
-            <ShieldCheck className="w-5 h-5 text-amber-400" />
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] font-black text-slate-400">Pro Signals</p>
-              <p className="text-2xl font-black text-white">{proSignalCount}</p>
-            </div>
-          </div>
-        </Card>
-
-        <Card className={`p-4 rounded-3xl border ${theme === "dark" ? "bg-slate-950/80 border-white/10" : "bg-white border-slate-200"}`}>
-          <div className="flex items-center gap-3">
-            <Activity className="w-5 h-5 text-emerald-400" />
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] font-black text-slate-400">Super Signals</p>
-              <p className="text-2xl font-black text-white">{availableMarketCount}</p>
-            </div>
-          </div>
-        </Card>
-
-        <Card className={`p-4 rounded-3xl border ${theme === "dark" ? "bg-slate-950/80 border-white/10" : "bg-white border-slate-200"}`}>
-          <div className="flex items-center gap-3">
-            <Layers className="w-5 h-5 text-violet-400" />
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] font-black text-slate-400">Advanced Scan</p>
-              <p className="text-2xl font-black text-white">{advancedScanCount}</p>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      <Card className={`rounded-3xl border ${theme === "dark" ? "bg-slate-950/90 border-white/10" : "bg-white border-slate-200"}`}>
-        <div className="flex flex-col gap-3 p-4 border-b border-white/10 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-lg font-black text-white">Signals Hub</h2>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge className="rounded-full bg-cyan-500/15 text-cyan-200 border border-cyan-500/20">{tradeNowCount} Trade Now</Badge>
-            <Badge className="rounded-full bg-slate-800/80 text-slate-200 border border-white/10">{availableMarketCount} Markets</Badge>
-          </div>
+    <div className="space-y-0">
+      <Card className={`rounded-3xl border gap-0 py-0 ${theme === "dark" ? "bg-slate-950/90 border-white/10" : "bg-white border-slate-200"}`}>
+        <div className="flex flex-col gap-0 px-0 py-0 border-b border-white/10 sm:flex-row sm:items-center sm:justify-between">
+          <div />
+          <div className="flex flex-wrap items-center gap-2" />
         </div>
 
-        <div className="p-4">
-          <Tabs value={activeSection} onValueChange={setActiveSection} className="space-y-4">
-            <TabsList className="grid grid-cols-4 gap-2 rounded-2xl border border-white/10 bg-slate-900/80 p-1">
-              <TabsTrigger value="standard" className="text-[11px] font-bold uppercase">Standard</TabsTrigger>
-              <TabsTrigger value="pro" className="text-[11px] font-bold uppercase">Pro</TabsTrigger>
-              <TabsTrigger value="super" className="text-[11px] font-bold uppercase">Super</TabsTrigger>
-              <TabsTrigger value="advanced" className="text-[11px] font-bold uppercase">Advanced</TabsTrigger>
-            </TabsList>
-
+        <div className="p-4 pr-0 pb-0">
+          <Tabs value={activeSection} onValueChange={setActiveSection} className="space-y-0">
             <TabsContent value="standard" className="mt-4">
               <SignalsTab
                 signals={signals}
