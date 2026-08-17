@@ -337,7 +337,7 @@ export default function DerivAnalysisApp() {
                 </div>
               </div>
 
-              <div className="px-1 sm:px-3 flex items-center justify-start gap-1 pt-4 pb-2.5 overflow-x-auto no-scrollbar text-[#1147b9] bg-[rgba(255,0,151,0)]">
+              <div className="px-1 sm:px-3 flex items-center justify-start gap-1 py-0 overflow-x-auto no-scrollbar bg-[#0b1b33]">
                 {/* Navigation Tabs */}
                 <ResponsiveTabs theme={theme} value={activeTab} onValueChange={setActiveTab}>
                         {[
@@ -381,17 +381,13 @@ export default function DerivAnalysisApp() {
                           <TabsTrigger
                             key={tab}
                             value={tab}
-                            className={`shrink-0 rounded-lg text-[9px] h-7 px-2.5 whitespace-nowrap transition-all duration-300 font-semibold flex items-center gap-1 border-0 ${activeTab === tab
+                            className={`shrink-0 rounded-md text-[10px] h-10 px-4 whitespace-nowrap transition-colors duration-200 font-semibold flex items-center gap-2 border border-transparent ${activeTab === tab
                               ? theme === "dark"
                                 ? tab === "signals-hub"
-                                  ? "bg-indigo-600 text-[#ff9006] font-bold shadow-md shadow-indigo-500/20"
-                                  : "bg-indigo-600 text-white shadow-md shadow-indigo-500/20"
-                                : tab === "signals-hub"
-                                  ? "bg-indigo-600 text-[#ff9006] font-bold shadow-sm shadow-indigo-500/10"
-                                  : "bg-indigo-600 text-white shadow-sm shadow-indigo-500/10"
-                              : theme === "dark"
-                                ? "text-slate-400 hover:text-white hover:bg-white/5"
-                                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                                  ? "bg-[#17345b] text-cyan-300 font-bold shadow-sm"
+                                  : "bg-[#17345b] text-white shadow-sm"
+                                : "bg-[#17345b] text-white shadow-sm"
+                              : "text-slate-400 hover:text-white hover:bg-white/10"
                               }`}
                             onClick={(e) => {
                               e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
