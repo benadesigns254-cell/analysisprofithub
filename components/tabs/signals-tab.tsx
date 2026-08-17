@@ -74,7 +74,7 @@ export function SignalsTab({ signals, proSignals, analysis, theme = "dark", symb
   const stdDev = 3.6
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-0">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {sortedSignals.map((signal, index) => {
           const isTradeNow = signal.status === "TRADE NOW"
@@ -86,7 +86,7 @@ export function SignalsTab({ signals, proSignals, analysis, theme = "dark", symb
           return (
             <div
               key={index}
-              className={`rounded-xl p-4 sm:p-6 border-2 relative overflow-hidden ${isTradeNow
+              className={`rounded-xl p-4 sm:p-6 pr-0 pb-0 border-2 relative overflow-hidden ${isTradeNow
                 ? theme === "dark"
                   ? "border-emerald-500/50 bg-gradient-to-br from-emerald-900/10 to-green-900/10 shadow-[0_0_20px_rgba(16,185,129,0.4)]"
                   : "border-emerald-300 bg-emerald-50/50 shadow-[0_0_20px_rgba(16,185,129,0.3)]"

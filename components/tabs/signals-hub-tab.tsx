@@ -52,9 +52,9 @@ export function SignalsHubTab({
           <div className="flex flex-wrap items-center gap-2" />
         </div>
 
-        <div className="p-4 pr-0 pb-0">
+        <div className="p-0">
           <Tabs value={activeSection} onValueChange={setActiveSection} className="space-y-0">
-            <TabsContent value="standard" className="mt-4">
+            <TabsContent value="standard" className="mt-0">
               <SignalsTab
                 signals={signals}
                 proSignals={proSignals}
@@ -70,7 +70,7 @@ export function SignalsHubTab({
               />
             </TabsContent>
 
-            <TabsContent value="pro" className="mt-4">
+            <TabsContent value="pro" className="mt-0">
               <ProSignalsTab
                 proSignals={proSignals}
                 analysis={analysis}
@@ -84,7 +84,7 @@ export function SignalsHubTab({
               />
             </TabsContent>
 
-            <TabsContent value="super" className="mt-4">
+            <TabsContent value="super" className="mt-0">
               <HeritageSuperSignals
                 theme={theme}
                 symbol={symbol}
@@ -96,7 +96,7 @@ export function SignalsHubTab({
               />
             </TabsContent>
 
-            <TabsContent value="advanced" className="mt-4">
+            <TabsContent value="advanced" className="mt-0">
               <AdvancedSignalsTab theme={theme} availableSymbols={availableSymbols} />
             </TabsContent>
           </Tabs>

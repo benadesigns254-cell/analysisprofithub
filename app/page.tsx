@@ -337,7 +337,7 @@ export default function DerivAnalysisApp() {
                 </div>
               </div>
 
-              <div className="px-1 sm:px-3 flex items-center justify-start gap-1 py-2.5 overflow-x-auto no-scrollbar text-[#1147b9]">
+              <div className="px-1 sm:px-3 flex items-center justify-start gap-1 pt-4 pb-2.5 overflow-x-auto no-scrollbar text-[#1147b9] bg-[rgba(255,0,151,0)]">
                 {/* Navigation Tabs */}
                 <ResponsiveTabs theme={theme} value={activeTab} onValueChange={setActiveTab}>
                         {[
