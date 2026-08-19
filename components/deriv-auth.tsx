@@ -149,12 +149,12 @@ export function DerivAuth({ theme = "dark" }: DerivAuthProps) {
   return (
     <>
       {!isLoggedIn && (
-        <div className="flex items-center gap-3">
-          <Button onClick={createDerivAccount} size="sm" className="text-[10px] sm:text-xs h-9 px-4 rounded-xl font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all active:scale-95">
-            <UserPlus className="h-4 w-4 mr-2" /> Sign Up
+        <div className="flex items-center gap-2">
+          <Button onClick={createDerivAccount} size="sm" className="text-[9px] h-7 px-3 rounded-lg font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all active:scale-95">
+            <UserPlus className="h-3 w-3 mr-1" /> Sign Up
           </Button>
-          <Button onClick={() => setShowLoginModal(true)} size="sm" className="text-[10px] sm:text-xs h-9 px-4 rounded-xl font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all active:scale-95 border border-indigo-400/30">
-            <LogIn className="h-4 w-4 mr-2" /> Login
+          <Button onClick={() => setShowLoginModal(true)} size="sm" className="text-[9px] h-7 px-3 rounded-lg font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all active:scale-95 border border-indigo-400/30">
+            <LogIn className="h-3 w-3 mr-1" /> Login
           </Button>
         </div>
       )}

@@ -903,6 +903,8 @@ export class DerivWebSocketManager {
   }
 
   public async unsubscribe(subscriptionId: string, callback?: (tick: TickData) => void) {
+    // Unsubscribe implementation
+  }
 
   public send(message: any): void {
     if (this.api && this.ws?.readyState === WebSocket.OPEN) {

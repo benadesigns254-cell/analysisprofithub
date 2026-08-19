@@ -74,7 +74,7 @@ export function SignalsTab({ signals, proSignals, analysis, theme = "dark", symb
   const stdDev = 3.6
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-0">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {sortedSignals.map((signal, index) => {
           const isTradeNow = signal.status === "TRADE NOW"
@@ -86,7 +86,7 @@ export function SignalsTab({ signals, proSignals, analysis, theme = "dark", symb
           return (
             <div
               key={index}
-              className={`rounded-xl p-4 sm:p-6 border-2 relative overflow-hidden ${isTradeNow
+              className={`rounded-xl p-4 sm:p-6 pr-0 pb-0 border-2 relative overflow-hidden ${isTradeNow
                 ? theme === "dark"
                   ? "border-emerald-500/50 bg-gradient-to-br from-emerald-900/10 to-green-900/10 shadow-[0_0_20px_rgba(16,185,129,0.4)]"
                   : "border-emerald-300 bg-emerald-50/50 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
@@ -244,54 +244,7 @@ export function SignalsTab({ signals, proSignals, analysis, theme = "dark", symb
         })}
       </div>
 
-      {analysis && (
-        <div
-          className={`soft-card p-6 border-white/5 rounded-xl ${theme === "dark"
-            ? "bg-gradient-to-br from-[#0f1629]/80 to-[#1a2235]/80 border-blue-500/20"
-            : "bg-white border-gray-200"
-            }`}
-        >
-          <h3 className={`text-xl font-bold mb-6 ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
-            Analysis Summary
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div
-                className={`text-3xl sm:text-4xl font-bold ${theme === "dark" ? "text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]" : "text-cyan-600"}`}
-              >
-                {analysis.totalTicks || 100}
-              </div>
-              <div className={`text-sm mt-1 ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>Total Ticks</div>
-            </div>
-            <div className="text-center">
-              <div
-                className={`text-3xl sm:text-4xl font-bold ${theme === "dark" ? "text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.8)]" : "text-emerald-600"}`}
-              >
-                {powerfulSignalsCount}
-              </div>
-              <div className={`text-sm mt-1 ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>
-                Powerful Signals
-              </div>
-            </div>
-            <div className="text-center">
-              <div
-                className={`text-3xl sm:text-4xl font-bold ${theme === "dark" ? "text-blue-400 drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]" : "text-blue-600"}`}
-              >
-                {validatedCount}
-              </div>
-              <div className={`text-sm mt-1 ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>Validated</div>
-            </div>
-            <div className="text-center">
-              <div
-                className={`text-3xl sm:text-4xl font-bold ${theme === "dark" ? "text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]" : "text-purple-600"}`}
-              >
-                {stdDev}
-              </div>
-              <div className={`text-sm mt-1 ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>Std Dev</div>
-            </div>
-          </div>
-        </div>
-      )}
+
     </div>
   )
 }

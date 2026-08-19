@@ -42,7 +42,7 @@ function LiveNumber({ value, decimals = 1 }: { value: number; decimals?: number 
 // Animated progress bar
 function LiveBar({ pct, colorClass, glowColor }: { pct: number; colorClass: string; glowColor: string }) {
   return (
-    <div className="h-3.5 w-full rounded-full bg-gradient-to-r from-white/5 to-white/[0.02] dark:from-white/10 dark:to-white/5 border border-white/10 dark:border-white/20 overflow-hidden p-px backdrop-blur-sm">
+    <div className="ph-progress-track h-3.5 w-full rounded-full bg-gradient-to-r from-white/5 to-white/[0.02] dark:from-white/10 dark:to-white/5 border border-white/10 dark:border-white/20 overflow-hidden p-px backdrop-blur-sm">
       <div
         className={`h-full rounded-full transition-all duration-700 ease-out ${colorClass} shadow-lg`}
         style={{ width: `${Math.min(100, pct)}%`, boxShadow: `0 0 15px ${glowColor}, inset 0 0 8px ${glowColor}40` }}
@@ -185,7 +185,7 @@ export function StatisticalAnalysis({ analysis, recentDigits, theme = "dark" }: 
   const bgCardClass = isDark ? "bg-[#1A1A1A]/80 border-gray-800" : "bg-[#F5F5F5] border-gray-200"
 
   return (
-    <div className="space-y-6">
+    <div className="ph-quantum-statistics flex flex-col gap-6">
       {/* ── Header ── */}
       <div className={`relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl backdrop-blur-xl border transition-all duration-300 ${isDark 
         ? "bg-gradient-to-r from-blue-600/10 via-purple-600/5 to-blue-600/10 border-blue-400/30 shadow-lg shadow-blue-500/10" 
@@ -248,7 +248,7 @@ export function StatisticalAnalysis({ analysis, recentDigits, theme = "dark" }: 
           <div className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Under card */}
-              <div className={`relative overflow-hidden group p-6 rounded-2xl border backdrop-blur-xl transition-all duration-300 ${isDark
+              <div className={`ph-trading-card relative overflow-hidden group p-6 rounded-2xl border backdrop-blur-xl transition-all duration-300 ${isDark
                 ? "bg-gradient-to-br from-emerald-600/15 via-black/40 to-black/30 border-emerald-400/30 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 hover:border-emerald-400/50"
                 : "bg-gradient-to-br from-emerald-50/60 via-white/40 to-white/30 border-emerald-200/50 shadow-sm hover:shadow-md"}`}>
                 <div className="absolute top-0 right-0 p-4 opacity-[0.05] group-hover:opacity-15 transition-opacity">
@@ -273,7 +273,7 @@ export function StatisticalAnalysis({ analysis, recentDigits, theme = "dark" }: 
               </div>
 
               {/* Over card */}
-              <div className={`relative overflow-hidden group p-6 rounded-2xl border backdrop-blur-xl transition-all duration-300 ${isDark
+              <div className={`ph-trading-card relative overflow-hidden group p-6 rounded-2xl border backdrop-blur-xl transition-all duration-300 ${isDark
                 ? "bg-gradient-to-br from-blue-600/15 via-black/40 to-black/30 border-blue-400/30 shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 hover:border-blue-400/50"
                 : "bg-gradient-to-br from-blue-50/60 via-white/40 to-white/30 border-blue-200/50 shadow-sm hover:shadow-md"}`}>
                 <div className="absolute top-0 right-0 p-4 opacity-[0.05] group-hover:opacity-15 transition-opacity">
@@ -459,7 +459,7 @@ export function StatisticalAnalysis({ analysis, recentDigits, theme = "dark" }: 
           <div className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Rise card */}
-              <div className={`relative overflow-hidden group p-6 rounded-2xl border backdrop-blur-xl transition-all duration-300 ${isDark
+              <div className={`ph-trading-card relative overflow-hidden group p-6 rounded-2xl border backdrop-blur-xl transition-all duration-300 ${isDark
                 ? "bg-gradient-to-br from-amber-600/15 via-black/40 to-black/30 border-amber-400/30 shadow-lg shadow-amber-500/10 hover:shadow-amber-500/20 hover:border-amber-400/50"
                 : "bg-gradient-to-br from-amber-50/60 via-white/40 to-white/30 border-amber-200/50 shadow-sm hover:shadow-md"}`}>
                 <div className="absolute top-0 right-0 p-4 opacity-[0.05] group-hover:opacity-15 transition-opacity">
@@ -481,7 +481,7 @@ export function StatisticalAnalysis({ analysis, recentDigits, theme = "dark" }: 
               </div>
 
               {/* Fall card */}
-              <div className={`relative overflow-hidden group p-6 rounded-2xl border backdrop-blur-xl transition-all duration-300 ${isDark
+              <div className={`ph-trading-card relative overflow-hidden group p-6 rounded-2xl border backdrop-blur-xl transition-all duration-300 ${isDark
                 ? "bg-gradient-to-br from-red-600/15 via-black/40 to-black/30 border-red-400/30 shadow-lg shadow-red-500/10 hover:shadow-red-500/20 hover:border-red-400/50"
                 : "bg-gradient-to-br from-red-50/60 via-white/40 to-white/30 border-red-200/50 shadow-sm hover:shadow-md"}`}>
                 <div className="absolute top-0 right-0 p-4 opacity-[0.05] group-hover:opacity-15 transition-opacity">

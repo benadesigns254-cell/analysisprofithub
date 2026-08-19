@@ -26,24 +26,17 @@ import { DiffersTab } from "@/components/tabs/differs-tab"
 import { StatisticalAnalysis } from "@/components/statistical-analysis"
 import { LastDigitsChart } from "@/components/charts/last-digits-chart"
 import { LastDigitsLineChart } from "@/components/charts/last-digits-line-chart"
-import { AIAnalysisTab } from "@/components/tabs/ai-analysis-tab"
 import { HeritageSuperSignals } from "@/components/heritage-super-signals"
 import { SuperSignalsTab } from "@/components/tabs/super-signals-tab"
-import { LoadingScreen } from "@/components/loading-screen"
 import { DerivAuth } from "@/components/deriv-auth"
 import { AutoBotTab } from "@/components/tabs/autobot-tab"
 import { AutomatedTab } from "@/components/tabs/automated-tab"
 import { SmartAuto24Tab } from "@/components/tabs/smartauto24-tab"
-import { ProfitPlusTabV2 } from "@/components/tabs/profit-plus-tab-v2"
-import { ProfitPlusRebuild } from "@/components/tabs/profit-plus-rebuild"
 import { AdvancedSignalsTab } from "@/components/advanced-signals-tab"
 import { useGlobalTradingContext } from "@/hooks/use-global-trading-context"
 import { verifier } from "@/lib/system-verifier"
 import { ResponsiveTabs } from "@/components/responsive-tabs"
-import { MoneyMakerTab } from "@/components/tabs/money-maker-tab"
 import type { Variants } from 'framer-motion';
-import { ToolsInfoTab } from "@/components/tabs/tools-info-tab"
-import SmartAdaptiveTradingTab from "@/components/tabs/smart-adaptive-trading"
 import { RiskDisclaimerModal } from "@/components/modals/risk-disclaimer-modal"
 import { MarketSelector } from "@/components/market-selector"
 
@@ -72,11 +65,11 @@ import {
 export default function DerivAnalysisApp() {
   const [theme, setTheme] = useState<"light" | "dark">("dark")
   const [activeTab, setActiveTab] = useState("smart-analysis")
-  const [isLoading, setIsLoading] = useState(true)
   const [initError, setInitError] = useState<string | null>(null)
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false)
   const [showRiskModal, setShowRiskModal] = useState(false)
   const [showAIScanner, setShowAIScanner] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const [siteConfig, setSiteConfig] = useState<any>(null)
   const [watchedDigits, setWatchedDigits] = useState<number[]>(() => {
@@ -148,11 +141,7 @@ export default function DerivAnalysisApp() {
       setInitError(error instanceof Error ? error.message : "Unknown error")
     }
 
-    // Check for risk acceptance
-    const accepted = localStorage.getItem("deriv_risk_accepted")
-    if (!accepted) {
-      setShowRiskModal(true)
-    }
+    // Risk modal is hidden on load, user can manually open it from header
 
     // Fetch site config
     fetch("/api/admin/site-config")
@@ -195,18 +184,6 @@ export default function DerivAnalysisApp() {
     )
   }
 
-  if (isLoading) {
-    return (
-      <LoadingScreen
-        onComplete={() => {
-          console.log("[v0] Loading screen completed, showing main app")
-          setIsLoading(false)
-        }}
-      />
-    )
-  }
-
-
 
   return (
     <div
@@ -220,147 +197,138 @@ export default function DerivAnalysisApp() {
                : "bg-white/98 border-gray-200"
                } backdrop-blur-xl`}
           >
-            <div className="mx-auto w-full px-2 sm:px-6 lg:px-8">
-              <div className="flex flex-nowrap items-center h-16 sm:h-20 gap-4 sm:gap-6 w-full justify-between overflow-hidden">
+            <div className="mx-auto w-full px-1 sm:px-3 lg:px-4">
+              <div className="flex flex-nowrap items-center h-10 sm:h-12 gap-2 sm:gap-3 w-full justify-between overflow-hidden">
 
-                {/* Brand Name - Profithub Logo */}
-                <div className="flex items-center shrink-0 gap-2.5 sm:min-w-[220px]">
-                  <div className={`p-2 rounded-xl flex items-center justify-center shrink-0 ${theme === "dark" ? "bg-green-500/10" : "bg-green-50"}`}>
-                    <Image
-                      src="/logo-profithub.png"
-                      alt="Profithub"
-                      width={24}
-                      height={24}
-                      style={{ objectFit: "contain" }}
-                      priority
-                    />
-                  </div>
-                  <div className="flex flex-col leading-none">
-                    <h1 className={`text-base sm:text-lg font-black tracking-tight uppercase bg-gradient-to-r from-green-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent`}>
-                      Profithub
-                    </h1>
-                    <h2 className={`text-[8px] sm:text-[9px] font-black tracking-[0.25em] opacity-60 uppercase ${theme === "dark" ? "text-green-300" : "text-green-600"}`}>
-                      AI TRADING
-                    </h2>
-                  </div>
-                </div>
-
-                <div className="flex-1" />
-
-                <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                  <div className="hidden sm:flex items-center gap-2">
-                    <Link href="/account">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={`h-8 px-3 text-[10px] rounded-lg font-bold flex items-center gap-1.5 transition-all ${theme === "dark"
-                          ? "bg-slate-800/50 text-slate-300 border border-slate-700/50 hover:bg-blue-600 hover:text-white"
-                          : "bg-gray-100 text-slate-700 hover:bg-blue-500 hover:text-white"}`}
-                      >
-                        <User className="h-3.5 w-3.5" />
-                        Account
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowRiskModal(true)}
-                      className={`h-8 px-3 text-[10px] rounded-lg font-bold flex items-center gap-1 transition-all ${theme === "dark"
-                        ? "bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20"
-                        : "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100"}`}
-                    >
-                      <AlertTriangle className="h-3.5 w-3.5" />
-                      Risk
-                    </Button>
-                    <LiveChat />
+                {/* Left Sidebar Toggle */}
+                <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+                  <SheetTrigger asChild>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={toggleTheme}
-                      className={`h-8 w-8 rounded-lg transition-all ${theme === "dark"
-                        ? "bg-white/5 text-yellow-500 hover:bg-white/10"
-                        : "bg-black/5 text-slate-700 hover:bg-black/10"
-                        }`}
+                      className={`h-7 w-7 rounded-lg transition-all hidden sm:flex ${
+                        theme === "dark" 
+                          ? "bg-white/5 text-white hover:bg-white/10" 
+                          : "bg-black/5 text-slate-900 hover:bg-black/10"
+                      }`}
                     >
-                      {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+                      <Menu className="h-4 w-4" />
                     </Button>
+                  </SheetTrigger>
+                  <SheetContent
+                    side="left"
+                    className={`w-64 border-r overflow-y-auto ${
+                      theme === "dark" 
+                        ? "bg-[#0b0f19] text-white border-white/10" 
+                        : "bg-white text-slate-900 border-slate-200"
+                    } p-0`}
+                  >
+                    <div className="p-6 border-b border-white/5">
+                      <SheetTitle className={theme === "dark" ? "text-white text-xl font-black uppercase tracking-tight" : "text-slate-900 text-xl font-black uppercase tracking-tight"}>
+                        Navigation
+                      </SheetTitle>
+                    </div>
+                    
+                    {/* Quick Actions */}
+                    <div className="p-4 border-b border-white/5 flex flex-col gap-2">
+                      <Link href="/account" className="w-full">
+                        <Button
+                          variant="ghost"
+                          className={`justify-start gap-3 w-full ${
+                            theme === "dark"
+                              ? "text-slate-300 hover:bg-white/5"
+                              : "text-slate-600 hover:bg-slate-100"
+                          }`}
+                        >
+                          <User className="h-4 w-4" />
+                          <span className="text-sm font-semibold">Account</span>
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        className={`justify-start gap-3 w-full ${
+                          theme === "dark"
+                            ? "text-slate-300 hover:bg-white/5"
+                            : "text-slate-600 hover:bg-slate-100"
+                        }`}
+                        onClick={() => setShowRiskModal(true)}
+                      >
+                        <AlertTriangle className="h-4 w-4" />
+                        <span className="text-sm font-semibold">Risk</span>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className={`justify-start gap-3 w-full ${
+                          theme === "dark"
+                            ? "text-slate-300 hover:bg-white/5"
+                            : "text-slate-600 hover:bg-slate-100"
+                        }`}
+                        onClick={toggleTheme}
+                      >
+                        {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                        <span className="text-sm font-semibold">{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+                      </Button>
+                    </div>
+
+                    {/* Navigation tabs in sidebar */}
+                    <div className="flex flex-col gap-2 p-4">
+                      {[
+                        { id: "smart-analysis", label: "Smart Analysis", icon: LineChart },
+                        { id: "smartauto24", label: "SmartAuto24", icon: Sparkles },
+                        { id: "autobot", label: "Auto Bot", icon: Cpu },
+                        { id: "automated", label: "Automated", icon: Terminal },
+                        { id: "signals-hub", label: "Signals Hub", icon: Flame },
+                        { id: "even-odd", label: "Even/Odd", icon: Hash },
+                        { id: "over-under", label: "Over/Under", icon: ArrowUpDown },
+                        { id: "advanced-over-under", label: "Advanced Over/Under", icon: Percent },
+                        { id: "matches", label: "Matches", icon: CheckSquare },
+                        { id: "differs", label: "Differs", icon: XCircle },
+                      ].map(({ id, label, icon: IconComponent }) => (
+                        <Button
+                          key={id}
+                          variant={activeTab === id ? "default" : "ghost"}
+                          className={`justify-start gap-3 h-10 ${
+                            activeTab === id
+                              ? theme === "dark"
+                                ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                                : "bg-indigo-600 text-white hover:bg-indigo-700"
+                              : theme === "dark"
+                                ? "text-slate-300 hover:bg-white/5"
+                                : "text-slate-600 hover:bg-slate-100"
+                          }`}
+                          onClick={() => {
+                            setActiveTab(id)
+                            setSidebarOpen(false)
+                          }}
+                        >
+                          <IconComponent className="h-4 w-4" />
+                          <span className="text-sm font-semibold">{label}</span>
+                        </Button>
+                      ))}
+                    </div>
+                  </SheetContent>
+                </Sheet>
+
+                <div className="flex-1" />
+
+                <div className="flex items-center gap-2 shrink-0">
+                  {/* Network Status Bars */}
+                  <div className="flex items-center gap-0.5">
+                    <div className={`h-2 w-0.5 rounded-sm transition-all ${theme === "dark" ? "bg-green-500/60" : "bg-green-600/60"}`} />
+                    <div className={`h-2.5 w-0.5 rounded-sm transition-all ${theme === "dark" ? "bg-green-500/80" : "bg-green-600/80"}`} />
+                    <div className={`h-3 w-0.5 rounded-sm transition-all ${theme === "dark" ? "bg-green-500" : "bg-green-600"}`} />
                   </div>
 
                   <DerivAuth theme={theme} />
-
-                  {/* Unified Hamburger Sheet containing Dashboard and mobile links */}
-                  <div className="flex items-center">
-                    <Sheet>
-                      <SheetTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className={`h-9 w-9 rounded-lg transition-all ${
-                            theme === "dark" 
-                              ? "bg-white/5 text-white hover:bg-white/10" 
-                              : "bg-black/5 text-slate-900 hover:bg-black/10"
-                          }`}
-                        >
-                          <Menu className="h-5 w-5" />
-                        </Button>
-                      </SheetTrigger>
-                      <SheetContent
-                        side="right"
-                        className={`w-full sm:max-w-2xl border-l overflow-y-auto ${
-                          theme === "dark" 
-                            ? "bg-[#0b0f19] text-white border-white/10" 
-                            : "bg-white text-slate-900 border-slate-200"
-                        } p-0`}
-                      >
-                        <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                          <SheetTitle className={theme === "dark" ? "text-white text-xl font-black uppercase tracking-tight" : "text-slate-900 text-xl font-black uppercase tracking-tight"}>
-                            Mobile Menu
-                          </SheetTitle>
-                        </div>
-                        
-                        {/* Mobile quick actions at the top of the sidebar */}
-                        <div className="sm:hidden grid grid-cols-2 gap-2 p-4 border-b border-white/5 bg-slate-950/25">
-                          <Link href="/account" className="col-span-2">
-                            <Button variant="outline" size="sm" className="w-full text-[10px] font-bold h-8">
-                              <User className="h-3 w-3 mr-1" /> Account
-                            </Button>
-                          </Link>
-                          <Button variant="outline" size="sm" onClick={() => setShowRiskModal(true)} className="w-full text-[10px] font-bold h-8">
-                            <AlertTriangle className="h-3 w-3 mr-1" /> Risk
-                          </Button>
-                          <Button variant="outline" size="sm" onClick={() => setShowAIScanner(true)} className="w-full text-[10px] font-bold h-8">
-                            <Cpu className="h-3 w-3 mr-1" /> AI Scanner
-                          </Button>
-                          <div className="w-full">
-                            <LiveChat />
-                          </div>
-                          <Button variant="outline" size="sm" onClick={toggleTheme} className="w-full text-[10px] font-bold h-8">
-                            {theme === "dark" ? <Sun className="h-3 w-3 mr-1" /> : <Moon className="h-3.5 w-3.5 mr-1" />} Theme
-                          </Button>
-                        </div>
-
-
-                      </SheetContent>
-                    </Sheet>
-                  </div>
                 </div>
               </div>
 
-              <div className="px-2 sm:px-6 lg:px-8 flex flex-col gap-2 pb-2">
-                {/* Navigation Tabs - Clean Design */}
-                <div className="flex items-center justify-start w-full overflow-x-auto no-scrollbar -mx-2 sm:-mx-6 lg:-mx-8 px-2 sm:px-6 lg:px-8 py-1">
-                  <div className={`inline-flex rounded-2xl border transition-all duration-500 p-1 gap-1.5 ${theme === "dark" 
-                    ? "bg-slate-950/45 border-white/5 shadow-inner backdrop-blur-md" 
-                    : "bg-slate-100/80 border-slate-200 shadow-xs backdrop-blur-md"
-                    }`}>
-                    <div className="overflow-x-auto no-scrollbar flex">
-                      <ResponsiveTabs theme={theme} value={activeTab} onValueChange={setActiveTab}>
+              <div className="px-1 sm:px-3 flex items-center justify-start gap-1 py-0 overflow-x-auto no-scrollbar bg-[#0b1b33]">
+                {/* Navigation Tabs */}
+                <ResponsiveTabs theme={theme} value={activeTab} onValueChange={setActiveTab}>
                         {[
-                          "smart-adaptive",
                           "smart-analysis",
                           "smartauto24",
-                          "profit-plus",
-                          "money-maker",
                           "autobot",
                           "automated",
                           "signals-hub",
@@ -369,15 +337,10 @@ export default function DerivAnalysisApp() {
                           "advanced-over-under",
                           "matches",
                           "differs",
-                          "ai-analysis",
-                          "tools-info",
                         ].filter(tab => !siteConfig?.hiddenTabs?.includes(tab)).map((tab) => {
                           const tabLabels: Record<string, string> = {
-                            "smart-adaptive": "Smart Adaptive",
                             "smart-analysis": "Smart Analysis",
                             "smartauto24": "SmartAuto24",
-                            "profit-plus": "ProfitPlus",
-                            "money-maker": "Money Maker",
                             "autobot": "Auto Bot",
                             "automated": "Automated",
                             "signals-hub": "Signals Hub",
@@ -386,15 +349,10 @@ export default function DerivAnalysisApp() {
                             "advanced-over-under": "Advanced Over/Under",
                             "matches": "Matches",
                             "differs": "Differs",
-                            "ai-analysis": "AI Analysis",
-                            "tools-info": "Tools Info"
                           }
                           const tabIcons: Record<string, any> = {
-                            "smart-adaptive": Sliders,
                             "smart-analysis": LineChart,
                             "smartauto24": Sparkles,
-                            "profit-plus": TrendingUp,
-                            "money-maker": TrendingUp,
                             "autobot": Cpu,
                             "automated": Terminal,
                             "signals-hub": Flame,
@@ -403,148 +361,114 @@ export default function DerivAnalysisApp() {
                             "advanced-over-under": Percent,
                             "matches": CheckSquare,
                             "differs": XCircle,
-                            "ai-analysis": BrainCircuit,
-                            "tools-info": HelpCircle
                           }
                           const IconComponent = tabIcons[tab]
                           return (
                           <TabsTrigger
                             key={tab}
                             value={tab}
-                            className={`shrink-0 rounded-xl text-[10px] sm:text-xs h-9 px-3.5 sm:px-4.5 whitespace-nowrap transition-all duration-300 font-bold flex items-center gap-1.5 border-0 ${activeTab === tab
+                            className={`shrink-0 rounded-md text-[10px] h-10 px-4 whitespace-nowrap transition-colors duration-200 font-semibold flex items-center gap-2 border border-transparent ${activeTab === tab
                               ? theme === "dark"
-                                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20"
-                                : "bg-indigo-600 text-white shadow-md shadow-indigo-500/10"
-                              : theme === "dark"
-                                ? "text-slate-400 hover:text-white hover:bg-white/5"
-                                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                                ? tab === "signals-hub"
+                                  ? "bg-[#17345b] text-cyan-300 font-bold shadow-sm"
+                                  : "bg-[#17345b] text-white shadow-sm"
+                                : "bg-[#17345b] text-white shadow-sm"
+                              : "text-slate-400 hover:text-white hover:bg-white/10"
                               }`}
                             onClick={(e) => {
                               e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
                             }}
                           >
-                            {IconComponent && <IconComponent className="h-3.5 w-3.5 shrink-0" />}
-                            <span>{tabLabels[tab] || tab}</span>
+                            {IconComponent && <IconComponent className="h-3 w-3 shrink-0" />}
+                            <span className={`hidden sm:inline ${tab === "over-under" ? "text-white" : ""}`}>{tabLabels[tab] || tab}</span>
                           </TabsTrigger>
                         )
                         })}
-                      </ResponsiveTabs>
-                    </div>
-                  </div>
-                </div>
+                </ResponsiveTabs>
               </div>
 
-              {/* 2. Balanced HUD Row - Dashboard Grid Style */}
-              <div className="flex items-center justify-center w-full px-1">
-                <div className={`p-0.5 sm:p-1 rounded-xl sm:rounded-2xl border ${theme === "dark" ? "bg-[#050505]/60 border-white/5 shadow-2xl" : "bg-white/50 border-gray-100 shadow-xl"} backdrop-blur-2xl w-full sm:w-auto`}>
-                  <div className="flex flex-nowrap items-center justify-center gap-0.5 sm:gap-2.5 overflow-x-auto no-scrollbar py-0.5 px-0.5">
-                    
-                    {/* 1. Market Selection Tile */}
-                      {availableSymbols.length > 0 && (
-                        <div className={`flex flex-col items-center justify-center min-w-[110px] sm:min-w-[170px] h-9 sm:h-11 rounded-lg sm:rounded-xl border transition-all ${theme === "dark"
-                          ? "bg-white/[0.03] border-white/10 shadow-inner"
-                          : "bg-gray-50 border-gray-200 shadow-xs"
-                          }`}>
-                          <span className={`text-[7px] sm:text-[8px] font-bold uppercase tracking-[0.18em] mb-0 opacity-70 ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}>
-                            Market Selection
-                          </span>
-                          <div className="w-full flex items-center justify-center scale-[0.85] sm:scale-100 origin-center -mt-0.5 sm:mt-0">
-                            <MarketSelector
-                              symbols={availableSymbols}
-                              currentSymbol={symbol}
-                              onSymbolChange={changeSymbol}
-                              theme={theme}
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* 2. Price Tile */}
-                      <div className={`flex flex-col items-center justify-center min-w-[75px] sm:min-w-[140px] h-9 sm:h-11 rounded-lg sm:rounded-xl border ${theme === "dark"
-                        ? "bg-white/[0.03] border-white/10 shadow-inner"
-                        : "bg-gray-50 border-gray-200 shadow-xs"
-                        }`}>
-                        <span className={`text-[7px] sm:text-[8px] font-bold uppercase tracking-[0.18em] mb-0 opacity-70 ${theme === "dark" ? "text-cyan-400" : "text-cyan-600"}`}>
-                          Price
-                        </span>
-                        <span className={`text-[11px] sm:text-[16px] font-black tabular-nums leading-none ${theme === "dark" ? "text-cyan-400" : "text-cyan-600"}`}>
-                          {currentPrice?.toFixed(5) || "0.00000"}
-                        </span>
-                      </div>
-
-                      {/* 3. Last Digit Tile */}
-                      <div className={`flex flex-col items-center justify-center min-w-[55px] sm:min-w-[110px] h-9 sm:h-11 rounded-lg sm:rounded-xl border relative overflow-hidden transition-all duration-300 ${theme === "dark"
-                        ? "bg-orange-500/[0.08] border-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.12)]"
-                        : "bg-orange-50 border-orange-200"
-                        }`}>
-                        <div className="absolute inset-0 bg-gradient-to-t from-orange-500/[0.05] to-transparent animate-pulse pointer-events-none" />
-                        <span className={`text-[7px] sm:text-[8px] font-bold uppercase tracking-[0.18em] mb-0 relative z-10 opacity-70 ${theme === "dark" ? "text-orange-400" : "text-orange-600"}`}>
-                          Last Digit
-                        </span>
-                        <span className={`text-[15px] sm:text-[22px] font-black relative z-10 leading-none ${theme === "dark" ? "text-orange-400" : "text-orange-600"}`}>
-                          {currentDigit ?? "0"}
-                        </span>
-                      </div>
-
-                      {/* 4. Ticks Tile */}
-                      <div className={`flex flex-col items-center justify-center min-w-[75px] sm:min-w-[140px] h-9 sm:h-11 rounded-lg sm:rounded-xl border ${theme === "dark"
-                        ? "bg-white/[0.03] border-white/10 shadow-inner"
-                        : "bg-gray-50 border-gray-200 shadow-xs"
-                        }`}>
-                        <span className={`text-[7px] sm:text-[8px] font-bold uppercase tracking-[0.18em] mb-0 opacity-70 ${theme === "dark" ? "text-emerald-400" : "text-emerald-600"}`}>
-                          Ticks
-                        </span>
-                        <div className="flex items-center gap-1 sm:gap-1.5 h-4 sm:h-5">
-                          <span className={`text-[11px] sm:text-[15px] font-black tabular-nums tracking-tight ${theme === "dark" ? "text-emerald-400" : "text-emerald-600"}`}>
-                            {(tickCount || 0).toLocaleString()}
-                          </span>
-                          <div className={`h-3 w-px ${theme === "dark" ? "bg-white/20" : "bg-gray-300"}`} />
-                          <select
-                            value={maxTicks}
-                            onChange={(e) => changeMaxTicks(Number(e.target.value))}
-                            className={`bg-transparent text-[9px] sm:text-[11px] font-black focus:outline-hidden cursor-pointer appearance-none ${theme === "dark" ? "text-slate-300" : "text-slate-700"}`}
-                          >
-                            {[25, 60, 100, 250, 500, 1000, 2500, 5000].map(v => (
-                              <option key={v} value={v} className={theme === "dark" ? "bg-slate-900 text-white" : "bg-white text-slate-900"}>{v}</option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-
-                      {/* 5. Watch Tile - Optimized Ultra-Compact */}
-                      <div className={`flex flex-col items-center justify-center min-w-[45px] sm:min-w-[80px] h-9 sm:h-11 rounded-lg sm:rounded-xl border transition-all ${theme === "dark"
-                        ? "bg-white/[0.03] border-white/10 hover:border-amber-500/50 shadow-inner"
-                        : "bg-gray-50 border-gray-200 shadow-xs"
-                        }`}>
-                        <span className={`text-[7px] sm:text-[8px] font-bold uppercase tracking-[0.18em] mb-0 opacity-70 ${theme === "dark" ? "text-amber-400" : "text-amber-600"}`}>
-                          Watch
-                        </span>
-                        <div className="flex items-center gap-1 px-1 w-full justify-center">
-                          <Eye className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-amber-500 shrink-0" />
-                          <input
-                            type="text"
-                            placeholder="D"
-                            className={`bg-transparent text-[9px] sm:text-[11px] font-black w-[15px] sm:w-[30px] focus:outline-hidden text-center placeholder:text-slate-600 ${theme === "dark" ? "text-slate-300" : "text-slate-700"}`}
-                            value={watchedDigits.join(',')}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              const digits = val.split(',')
-                                .map(d => parseInt(d.trim()))
-                                .filter(d => !isNaN(d) && d >= 0 && d <= 9);
-                              setWatchedDigits([...new Set(digits)]);
-                            }}
-                          />
-                        </div>
-                      </div>
-
-                    </div>
+              {/* Market Info Bar - Single Row Horizontal */}
+              <div className="flex items-center gap-0.5 px-0.5 py-0.5 overflow-x-auto no-scrollbar">
+                {/* Market Selection */}
+                {availableSymbols.length > 0 && (
+                  <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
+                    ? "bg-white/[0.03] border-white/10"
+                    : "bg-gray-50 border-gray-200"
+                    }`}>
+                    <MarketSelector
+                      symbols={availableSymbols}
+                      currentSymbol={symbol}
+                      onSymbolChange={changeSymbol}
+                      theme={theme}
+                    />
                   </div>
+                )}
+
+                {/* Price */}
+                <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
+                  ? "bg-white/[0.03] border-white/10"
+                  : "bg-gray-50 border-gray-200"
+                  }`}>
+                  <span className={`text-xs font-black tabular-nums ${theme === "dark" ? "text-cyan-400" : "text-cyan-600"}`}>
+                    {currentPrice?.toFixed(4) || "0.0000"}
+                  </span>
+                </div>
+
+                {/* Last Digit */}
+                <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
+                  ? "bg-orange-500/[0.08] border-orange-500/30"
+                  : "bg-orange-50 border-orange-200"
+                  }`}>
+                  <span className={`text-sm font-black ${theme === "dark" ? "text-orange-400" : "text-orange-600"}`}>
+                    {currentDigit ?? "0"}
+                  </span>
+                </div>
+
+                {/* Ticks */}
+                <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
+                  ? "bg-white/[0.03] border-white/10"
+                  : "bg-gray-50 border-gray-200"
+                  }`}>
+                  <span className={`text-xs font-black tabular-nums ${theme === "dark" ? "text-emerald-400" : "text-emerald-600"}`}>
+                    {(tickCount || 0).toLocaleString()}
+                  </span>
+                  <select
+                    value={maxTicks}
+                    onChange={(e) => changeMaxTicks(Number(e.target.value))}
+                    className={`bg-transparent text-[7px] font-black focus:outline-hidden cursor-pointer appearance-none ml-0.5 ${theme === "dark" ? "text-slate-300" : "text-slate-700"}`}
+                  >
+                    {[25, 60, 100, 250, 500, 1000, 2500, 5000].map(v => (
+                      <option key={v} value={v} className={theme === "dark" ? "bg-slate-900 text-white" : "bg-white text-slate-900"}>{v}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Watch */}
+                <div className={`flex items-center gap-0.5 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
+                  ? "bg-white/[0.03] border-white/10"
+                  : "bg-gray-50 border-gray-200"
+                  }`}>
+                  <Eye className="h-2.5 w-2.5 text-amber-500 shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="D"
+                    className={`bg-transparent text-[7px] font-black w-[18px] focus:outline-hidden text-center placeholder:text-slate-600 ${theme === "dark" ? "text-slate-300" : "text-slate-700"}`}
+                    value={watchedDigits.join(',')}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const digits = val.split(',')
+                        .map(d => parseInt(d.trim()))
+                        .filter(d => !isNaN(d) && d >= 0 && d <= 9);
+                      setWatchedDigits([...new Set(digits)]);
+                    }}
+                  />
                 </div>
               </div>
+            </div>
           </header>
         )}
 
-        <main className="flex-1 pt-[180px] sm:pt-[240px] pb-4 px-1 sm:px-4 space-y-2 sm:space-y-4 max-w-7xl mx-auto w-full">
+        <main className="flex-1 pt-12 sm:pt-16 pb-4 px-1 sm:px-4 space-y-2 sm:space-y-4 max-w-7xl mx-auto w-full">
           {connectionStatus === "disconnected" && tickCount === 0 ? (
             <div className="text-center py-12 sm:py-20 md:py-32">
               <h2
@@ -570,14 +494,6 @@ export default function DerivAnalysisApp() {
                 </div>
               )}
               <TabsContent value="smart-analysis" className="mt-0 space-y-2 sm:space-y-3 md:space-y-4">
-                <div
-                  className={`rounded-lg sm:rounded-xl p-2 sm:p-3 border flex items-center justify-between ${theme === "dark" ? "bg-linear-to-br from-[#0f1629]/80 to-[#1a2235]/80 border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.2)]" : "bg-white border-gray-200 shadow-lg"}`}
-                >
-                  <div className="flex items-center gap-2">
-                    <div className={`h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse`} />
-                    <span className={`text-[10px] font-bold uppercase ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>Market Live</span>
-                  </div>
-                </div>
 
                 {analysis && analysis.digitFrequencies && (
                   <div
@@ -760,20 +676,6 @@ export default function DerivAnalysisApp() {
                 )}
               </TabsContent>
 
-              <TabsContent value="ai-analysis" className="mt-0">
-                {analysis && (
-                  <AIAnalysisTab
-                    analysis={analysis}
-                    currentDigit={currentDigit}
-                    currentPrice={currentPrice}
-                    symbol={symbol}
-                    theme={theme}
-                    availableSymbols={availableSymbols}
-                    onSymbolChange={changeSymbol}
-                  />
-                )}
-              </TabsContent>
-
               <TabsContent value="autobot" className="mt-0">
                 <AutoBotTab theme={theme} symbol={symbol} />
               </TabsContent>
@@ -793,28 +695,6 @@ export default function DerivAnalysisApp() {
                 />
               </TabsContent>
 
-              <TabsContent value="profit-plus" className="mt-0">
-                <ProfitPlusRebuild />
-              </TabsContent>
-
-
-              <TabsContent value="money-maker" className="mt-0">
-                <MoneyMakerTab
-                  theme={theme}
-                  symbol={symbol}
-                  onSymbolChange={changeSymbol}
-                  availableSymbols={availableSymbols}
-                  recentDigits={recent100Digits}
-                />
-              </TabsContent>
-
-              <TabsContent value="smart-adaptive" className="mt-0">
-                {analysis && <SmartAdaptiveTradingTab signals={signals} analysis={analysis} symbol={symbol} theme={theme} currentPrice={currentPrice} currentDigit={currentDigit} tickCount={tickCount} />}
-              </TabsContent>
-
-              <TabsContent value="tools-info" className="mt-0">
-                <ToolsInfoTab theme={theme} connectionLogs={connectionLogs} />
-              </TabsContent>
             </>
           )}
         </main>
