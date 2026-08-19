@@ -1,0 +1,53 @@
+/* Profithub trading UI theme guide — mandatory for analytics surfaces. */
+:root {
+  --ph-midnight: #070d1f;
+  --ph-panel: #0b1428;
+  --ph-panel-raised: #101d36;
+  --ph-border: rgba(92, 139, 205, 0.28);
+  --ph-cyan: #00d4aa;
+  --ph-blue: #0066ff;
+  --ph-purple: #9f7aea;
+  --ph-orange: #ff6b35;
+  --ph-amber: #f59e0b;
+  --ph-green: #22c55e;
+  --ph-muted: #8da0bb;
+  --ph-danger: #ef4444;
+}
+
+.ph-quantum-statistics {
+  color: white;
+}
+
+.ph-quantum-statistics > div:first-child {
+  background: linear-gradient(135deg, rgba(0, 102, 255, 0.16), rgba(7, 13, 31, 0.94) 55%, rgba(159, 122, 234, 0.12)) !important;
+  border-color: var(--ph-border) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24) !important;
+}
+
+.ph-quantum-statistics .ph-trading-card {
+  background: linear-gradient(145deg, rgba(16, 29, 54, 0.96), rgba(7, 13, 31, 0.94)) !important;
+  border-color: var(--ph-border) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22) !important;
+}
+
+.ph-quantum-statistics .ph-metric-card {
+  background: rgba(7, 13, 31, 0.68) !important;
+  border-color: rgba(92, 139, 205, 0.22) !important;
+}
+
+.ph-quantum-statistics .ph-progress-track {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+.ph-quantum-statistics .ph-muted { color: var(--ph-muted) !important; }
+.ph-quantum-statistics .ph-cyan { color: var(--ph-cyan) !important; }
+.ph-quantum-statistics .ph-blue { color: var(--ph-blue) !important; }
+.ph-quantum-statistics .ph-purple { color: var(--ph-purple) !important; }
+.ph-quantum-statistics .ph-orange { color: var(--ph-orange) !important; }
+.ph-quantum-statistics .ph-amber { color: var(--ph-amber) !important; }
+.ph-quantum-statistics .ph-green { color: var(--ph-green) !important; }
+
+@media (max-width: 640px) {
+  .ph-quantum-statistics > div:first-child { padding: 0.75rem !important; }
+}

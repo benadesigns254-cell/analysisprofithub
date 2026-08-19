@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "../styles/premium-design-system.css";
+@import "../styles/profithub-theme-guide.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -228,4 +229,4 @@
   .animate-glow-blue { animation: glowBlue 2s ease-in-out infinite; }
   .animate-liquid-fill { animation: liquidFill 3s ease-in-out forwards; }
   .card-glow-animate { animation: cardGlowPulse 4s ease-in-out infinite; }
-}
+}

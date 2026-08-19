@@ -28,7 +28,6 @@ import { LastDigitsChart } from "@/components/charts/last-digits-chart"
 import { LastDigitsLineChart } from "@/components/charts/last-digits-line-chart"
 import { HeritageSuperSignals } from "@/components/heritage-super-signals"
 import { SuperSignalsTab } from "@/components/tabs/super-signals-tab"
-import { LoadingScreen } from "@/components/loading-screen"
 import { DerivAuth } from "@/components/deriv-auth"
 import { AutoBotTab } from "@/components/tabs/autobot-tab"
 import { AutomatedTab } from "@/components/tabs/automated-tab"
@@ -66,7 +65,6 @@ import {
 export default function DerivAnalysisApp() {
   const [theme, setTheme] = useState<"light" | "dark">("dark")
   const [activeTab, setActiveTab] = useState("smart-analysis")
-  const [isLoading, setIsLoading] = useState(true)
   const [initError, setInitError] = useState<string | null>(null)
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false)
   const [showRiskModal, setShowRiskModal] = useState(false)
@@ -185,18 +183,6 @@ export default function DerivAnalysisApp() {
       </div>
     )
   }
-
-  if (isLoading) {
-    return (
-      <LoadingScreen
-        onComplete={() => {
-          console.log("[v0] Loading screen completed, showing main app")
-          setIsLoading(false)
-        }}
-      />
-    )
-  }
-
 
 
   return (
