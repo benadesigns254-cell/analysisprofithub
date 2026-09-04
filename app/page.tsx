@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useDeriv } from "@/hooks/use-deriv"
 import { Tabs, TabsContent, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
@@ -39,7 +39,6 @@ import { ResponsiveTabs } from "@/components/responsive-tabs"
 import type { Variants } from 'framer-motion';
 import { RiskDisclaimerModal } from "@/components/modals/risk-disclaimer-modal"
 import { MarketSelector } from "@/components/market-selector"
-import { Slider } from "@/components/ui/slider"
 
 import { FloatingAIScanner } from "@/components/floating-ai-scanner"
 import { LiveChat } from "@/components/live-chat"
@@ -160,11 +159,18 @@ export default function DerivAnalysisApp() {
 
   // Defensive filtering to prevent `.toString()` crashes in chart components
   const recent100DigitsRaw = getRecentDigits(100)
-  const recent100Digits = recent100DigitsRaw.filter((d: any) => d !== undefined && d !== null)
-  
+  const recent100Digits = useMemo(
+    () => recent100DigitsRaw.filter((d: any) => d !== undefined && d !== null),
+    [recent100DigitsRaw],
+  )
+
   const recent50Digits = recent100Digits.length >= 50 ? recent100Digits.slice(-50) : recent100Digits
   const recent40Digits = recent100Digits.length >= 40 ? recent100Digits.slice(-40) : recent100Digits
   const recentDigits = recent100Digits.length >= 20 ? recent100Digits.slice(-20) : recent100Digits
+  const chartDigits = useMemo(
+    () => recent100Digits.slice(-digitChartRange),
+    [recent100Digits, digitChartRange],
+  )
 
   const activeSignals = (signals || []).filter((s) => s.status !== "NEUTRAL")
   const powerfulSignalsCount = activeSignals.filter((s) => s.status === "TRADE NOW").length
@@ -535,19 +541,20 @@ export default function DerivAnalysisApp() {
                       </div>
                       <div className="flex items-center gap-3 sm:w-56">
                         <span className="text-xs font-bold text-cyan-400">25</span>
-                        <Slider
-                          min={25}
-                          max={50}
-                          step={25}
-                          value={[digitChartRange]}
-                          onValueChange={([value]) => setDigitChartRange(value)}
+                        <input
+                          type="range"
+                          min="25"
+                          max="50"
+                          step="25"
+                          value={digitChartRange}
+                          onChange={(event) => setDigitChartRange(Number(event.target.value))}
                           aria-label="Choose digit chart range"
-                          className="flex-1"
+                          className="h-2 flex-1 cursor-pointer accent-cyan-400"
                         />
                         <span className="text-xs font-bold text-cyan-400">50</span>
                       </div>
                     </div>
-                    <LastDigitsLineChart digits={recentDigits.slice(-digitChartRange)} />
+                    <LastDigitsLineChart digits={chartDigits} />
 
                     <div className="mt-5 border-t border-white/10 pt-5">
                       <h3 className={`mb-3 text-sm sm:text-base md:text-lg font-bold ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Last 50 Digits Chart</h3>

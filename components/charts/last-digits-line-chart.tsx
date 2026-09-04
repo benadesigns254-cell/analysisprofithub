@@ -1,12 +1,12 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { memo, useEffect, useRef } from "react"
 
 interface LastDigitsLineChartProps {
   digits: number[]
 }
 
-export function LastDigitsLineChart({ digits }: LastDigitsLineChartProps) {
+export const LastDigitsLineChart = memo(function LastDigitsLineChart({ digits }: LastDigitsLineChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -85,4 +85,6 @@ export function LastDigitsLineChart({ digits }: LastDigitsLineChartProps) {
       <canvas ref={canvasRef} className="w-full h-full" style={{ width: "100%", height: "100%" }} />
     </div>
   )
-}
+})
+
+
