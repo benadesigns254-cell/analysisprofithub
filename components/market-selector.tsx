@@ -88,6 +88,9 @@ export function MarketSelector({ symbols, currentSymbol, onSymbolChange, theme =
   }, [symbols])
 
   const currentSymbolData = symbols.find((s) => s.symbol === currentSymbol)
+  const shortMarketName = (currentSymbolData?.display_name || currentSymbol)
+    .replace(/^VOLATILITY\s*/i, "VOL ")
+    .replace(/\s*INDEX$/i, "")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -99,7 +102,7 @@ export function MarketSelector({ symbols, currentSymbol, onSymbolChange, theme =
           className={`w-full min-w-0 h-full py-1 sm:py-2 px-1.5 sm:px-3 rounded-lg sm:rounded-xl flex items-center justify-between transition-all duration-300 overflow-hidden border-none shadow-none bg-transparent hover:bg-white/5 text-white ring-0 focus-visible:ring-0`}
         >
           <span className="truncate w-full text-center sm:text-left font-black text-[10px] sm:text-sm tracking-tight leading-none uppercase">
-            {currentSymbolData?.display_name || currentSymbol}
+            {shortMarketName}
           </span>
           <ChevronDown className="ml-0.5 sm:ml-1 h-3 w-3 sm:h-4 sm:w-4 shrink-0 opacity-50 group-hover:opacity-100 transition-opacity" />
         </Button>
