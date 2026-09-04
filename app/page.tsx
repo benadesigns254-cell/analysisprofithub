@@ -39,6 +39,7 @@ import { ResponsiveTabs } from "@/components/responsive-tabs"
 import type { Variants } from 'framer-motion';
 import { RiskDisclaimerModal } from "@/components/modals/risk-disclaimer-modal"
 import { MarketSelector } from "@/components/market-selector"
+import { Slider } from "@/components/ui/slider"
 
 import { FloatingAIScanner } from "@/components/floating-ai-scanner"
 import { LiveChat } from "@/components/live-chat"
@@ -65,6 +66,7 @@ import {
 export default function DerivAnalysisApp() {
   const [theme, setTheme] = useState<"light" | "dark">("dark")
   const [activeTab, setActiveTab] = useState("smart-analysis")
+  const [digitChartRange, setDigitChartRange] = useState(25)
   const [initError, setInitError] = useState<string | null>(null)
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false)
   const [showRiskModal, setShowRiskModal] = useState(false)
@@ -387,45 +389,49 @@ export default function DerivAnalysisApp() {
                 </ResponsiveTabs>
               </div>
 
-              {/* Market Info Bar - Single Row Horizontal */}
-              <div className="flex items-center gap-0.5 px-0.5 py-0.5 overflow-x-auto no-scrollbar">
-                {/* Market Selection */}
-                {availableSymbols.length > 0 && (
-                  <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
-                    ? "bg-white/[0.03] border-white/10"
-                    : "bg-gray-50 border-gray-200"
+              {/* Floating market price card beneath the tabs */}
+              <div className="flex w-full justify-center px-2 py-1">
+                <div className={`flex max-w-full items-center justify-center gap-2 rounded-xl border p-1 shadow-lg ${theme === "dark"
+                  ? "border-blue-400/25 bg-[#0b1428]/95 shadow-blue-950/30"
+                  : "border-slate-200 bg-white shadow-slate-200/70"
+                  }`}>
+                  {/* Market Selection */}
+                  {availableSymbols.length > 0 && (
+                    <div className={`flex h-8 min-w-[150px] items-center rounded-lg border px-2 ${theme === "dark"
+                      ? "border-cyan-400/25 bg-cyan-400/[0.06]"
+                      : "border-cyan-200 bg-cyan-50"
+                      }`}>
+                      <MarketSelector
+                        symbols={availableSymbols}
+                        currentSymbol={symbol}
+                        onSymbolChange={changeSymbol}
+                        theme={theme}
+                      />
+                    </div>
+                  )}
+
+                  {/* Price */}
+                  <div className={`flex h-8 items-center rounded-lg border px-3 ${theme === "dark"
+                    ? "border-blue-400/25 bg-blue-500/[0.08]"
+                    : "border-blue-200 bg-blue-50"
                     }`}>
-                    <MarketSelector
-                      symbols={availableSymbols}
-                      currentSymbol={symbol}
-                      onSymbolChange={changeSymbol}
-                      theme={theme}
-                    />
+                    <span className={`text-sm font-black tabular-nums ${theme === "dark" ? "text-cyan-400" : "text-cyan-600"}`}>
+                      {currentPrice?.toFixed(4) || "0.0000"}
+                    </span>
                   </div>
-                )}
 
-                {/* Price */}
-                <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
-                  ? "bg-white/[0.03] border-white/10"
-                  : "bg-gray-50 border-gray-200"
-                  }`}>
-                  <span className={`text-xs font-black tabular-nums ${theme === "dark" ? "text-cyan-400" : "text-cyan-600"}`}>
-                    {currentPrice?.toFixed(4) || "0.0000"}
-                  </span>
-                </div>
-
-                {/* Last Digit */}
-                <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
-                  ? "bg-orange-500/[0.08] border-orange-500/30"
-                  : "bg-orange-50 border-orange-200"
-                  }`}>
-                  <span className={`text-sm font-black ${theme === "dark" ? "text-orange-400" : "text-orange-600"}`}>
-                    {currentDigit ?? "0"}
-                  </span>
-                </div>
+                  {/* Last Digit */}
+                  <div className={`flex h-8 min-w-9 items-center justify-center rounded-lg border px-3 ${theme === "dark"
+                    ? "border-orange-400/35 bg-orange-500/[0.12]"
+                    : "border-orange-200 bg-orange-50"
+                    }`}>
+                    <span className={`text-base font-black ${theme === "dark" ? "text-orange-400" : "text-orange-600"}`}>
+                      {currentDigit ?? "0"}
+                    </span>
+                  </div>
 
                 {/* Ticks */}
-                <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
+                <div className={`flex items-center gap-1 px-1.5 h-6 rounded-md border shrink-0 ${theme === "dark"
                   ? "bg-white/[0.03] border-white/10"
                   : "bg-gray-50 border-gray-200"
                   }`}>
@@ -464,6 +470,7 @@ export default function DerivAnalysisApp() {
                   />
                 </div>
               </div>
+            </div>
             </div>
           </header>
         )}
@@ -519,26 +526,34 @@ export default function DerivAnalysisApp() {
                 {analysis && recent100Digits.length > 0 && recentDigits.length > 0 && (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-4">
                     <div
-                      className={`rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-4 border ${theme === "dark" ? "bg-linear-to-br from-[#0f1629]/80 to-[#1a2235]/80 border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.2)]" : "bg-white border-gray-200 shadow-lg"}`}
-                    >
-                      <h3
-                        className={`text-sm sm:text-base md:text-lg font-bold mb-3 sm:mb-4 ${theme === "dark" ? "text-white" : "text-gray-900"}`}
-                      >
-                        Last Digits Line Chart
-                      </h3>
-                      <LastDigitsLineChart digits={recentDigits.slice(-10)} />
+                    className={`lg:col-span-2 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 border ${theme === "dark" ? "bg-linear-to-br from-[#0f1629]/80 to-[#1a2235]/80 border-purple-500/25 shadow-[0_0_30px_rgba(139,92,246,0.18)]" : "bg-white border-gray-200 shadow-lg"}`}
+                  >
+                    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <h3 className={`text-sm sm:text-base md:text-lg font-bold ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Last Digits Line Chart</h3>
+                        <p className={`mt-1 text-xs ${theme === "dark" ? "text-slate-400" : "text-gray-500"}`}>Showing the latest {digitChartRange} digits</p>
+                      </div>
+                      <div className="flex items-center gap-3 sm:w-56">
+                        <span className="text-xs font-bold text-cyan-400">25</span>
+                        <Slider
+                          min={25}
+                          max={50}
+                          step={25}
+                          value={[digitChartRange]}
+                          onValueChange={([value]) => setDigitChartRange(value)}
+                          aria-label="Choose digit chart range"
+                          className="flex-1"
+                        />
+                        <span className="text-xs font-bold text-cyan-400">50</span>
+                      </div>
                     </div>
+                    <LastDigitsLineChart digits={recentDigits.slice(-digitChartRange)} />
 
-                    <div
-                      className={`rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-4 border ${theme === "dark" ? "bg-linear-to-br from-[#0f1629]/80 to-[#1a2235]/80 border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.2)]" : "bg-white border-gray-200 shadow-lg"}`}
-                    >
-                      <h3
-                        className={`text-sm sm:text-base md:text-lg font-bold mb-3 sm:mb-4 ${theme === "dark" ? "text-white" : "text-gray-900"}`}
-                      >
-                        Last 50 Digits Chart
-                      </h3>
+                    <div className="mt-5 border-t border-white/10 pt-5">
+                      <h3 className={`mb-3 text-sm sm:text-base md:text-lg font-bold ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Last 50 Digits Chart</h3>
                       <LastDigitsChart digits={recent50Digits} />
                     </div>
+                  </div>
                   </div>
                 )}
 
