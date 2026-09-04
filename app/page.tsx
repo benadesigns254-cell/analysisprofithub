@@ -387,15 +387,15 @@ export default function DerivAnalysisApp() {
                 </ResponsiveTabs>
               </div>
 
-              {/* Market Info Bar - centered beneath tabs */}
-              <div className="flex w-full justify-center px-3 py-3">
-                <div className={`flex max-w-full items-center justify-center gap-2 rounded-2xl border p-1.5 shadow-lg ${theme === "dark"
-                  ? "border-blue-400/20 bg-[#0b1428]/95 shadow-blue-950/30"
+              {/* Floating market price card beneath the tabs */}
+              <div className="flex w-full justify-center px-2 py-1">
+                <div className={`flex max-w-full items-center justify-center gap-2 rounded-xl border p-1 shadow-lg ${theme === "dark"
+                  ? "border-blue-400/25 bg-[#0b1428]/95 shadow-blue-950/30"
                   : "border-slate-200 bg-white shadow-slate-200/70"
                   }`}>
                   {/* Market Selection */}
                   {availableSymbols.length > 0 && (
-                    <div className={`flex h-9 min-w-[150px] items-center rounded-xl border px-2 ${theme === "dark"
+                    <div className={`flex h-8 min-w-[150px] items-center rounded-lg border px-2 ${theme === "dark"
                       ? "border-cyan-400/25 bg-cyan-400/[0.06]"
                       : "border-cyan-200 bg-cyan-50"
                       }`}>
@@ -409,7 +409,7 @@ export default function DerivAnalysisApp() {
                   )}
 
                   {/* Price */}
-                  <div className={`flex h-9 items-center rounded-xl border px-3 ${theme === "dark"
+                  <div className={`flex h-8 items-center rounded-lg border px-3 ${theme === "dark"
                     ? "border-blue-400/25 bg-blue-500/[0.08]"
                     : "border-blue-200 bg-blue-50"
                     }`}>
@@ -419,7 +419,7 @@ export default function DerivAnalysisApp() {
                   </div>
 
                   {/* Last Digit */}
-                  <div className={`flex h-9 min-w-9 items-center justify-center rounded-xl border px-3 ${theme === "dark"
+                  <div className={`flex h-8 min-w-9 items-center justify-center rounded-lg border px-3 ${theme === "dark"
                     ? "border-orange-400/35 bg-orange-500/[0.12]"
                     : "border-orange-200 bg-orange-50"
                     }`}>
@@ -429,7 +429,7 @@ export default function DerivAnalysisApp() {
                   </div>
 
                 {/* Ticks */}
-                <div className={`flex items-center gap-1 px-1.5 h-7 rounded-md border shrink-0 ${theme === "dark"
+                <div className={`flex items-center gap-1 px-1.5 h-6 rounded-md border shrink-0 ${theme === "dark"
                   ? "bg-white/[0.03] border-white/10"
                   : "bg-gray-50 border-gray-200"
                   }`}>
