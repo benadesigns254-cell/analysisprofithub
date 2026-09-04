@@ -39,6 +39,7 @@ import { ResponsiveTabs } from "@/components/responsive-tabs"
 import type { Variants } from 'framer-motion';
 import { RiskDisclaimerModal } from "@/components/modals/risk-disclaimer-modal"
 import { MarketSelector } from "@/components/market-selector"
+import { Slider } from "@/components/ui/slider"
 
 import { FloatingAIScanner } from "@/components/floating-ai-scanner"
 import { LiveChat } from "@/components/live-chat"
@@ -65,6 +66,7 @@ import {
 export default function DerivAnalysisApp() {
   const [theme, setTheme] = useState<"light" | "dark">("dark")
   const [activeTab, setActiveTab] = useState("smart-analysis")
+  const [digitChartRange, setDigitChartRange] = useState(25)
   const [initError, setInitError] = useState<string | null>(null)
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false)
   const [showRiskModal, setShowRiskModal] = useState(false)
@@ -524,26 +526,34 @@ export default function DerivAnalysisApp() {
                 {analysis && recent100Digits.length > 0 && recentDigits.length > 0 && (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-4">
                     <div
-                      className={`rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-4 border ${theme === "dark" ? "bg-linear-to-br from-[#0f1629]/80 to-[#1a2235]/80 border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.2)]" : "bg-white border-gray-200 shadow-lg"}`}
-                    >
-                      <h3
-                        className={`text-sm sm:text-base md:text-lg font-bold mb-3 sm:mb-4 ${theme === "dark" ? "text-white" : "text-gray-900"}`}
-                      >
-                        Last Digits Line Chart
-                      </h3>
-                      <LastDigitsLineChart digits={recentDigits.slice(-10)} />
+                    className={`lg:col-span-2 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 border ${theme === "dark" ? "bg-linear-to-br from-[#0f1629]/80 to-[#1a2235]/80 border-purple-500/25 shadow-[0_0_30px_rgba(139,92,246,0.18)]" : "bg-white border-gray-200 shadow-lg"}`}
+                  >
+                    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <h3 className={`text-sm sm:text-base md:text-lg font-bold ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Last Digits Line Chart</h3>
+                        <p className={`mt-1 text-xs ${theme === "dark" ? "text-slate-400" : "text-gray-500"}`}>Showing the latest {digitChartRange} digits</p>
+                      </div>
+                      <div className="flex items-center gap-3 sm:w-56">
+                        <span className="text-xs font-bold text-cyan-400">25</span>
+                        <Slider
+                          min={25}
+                          max={50}
+                          step={25}
+                          value={[digitChartRange]}
+                          onValueChange={([value]) => setDigitChartRange(value)}
+                          aria-label="Choose digit chart range"
+                          className="flex-1"
+                        />
+                        <span className="text-xs font-bold text-cyan-400">50</span>
+                      </div>
                     </div>
+                    <LastDigitsLineChart digits={recentDigits.slice(-digitChartRange)} />
 
-                    <div
-                      className={`rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-4 border ${theme === "dark" ? "bg-linear-to-br from-[#0f1629]/80 to-[#1a2235]/80 border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.2)]" : "bg-white border-gray-200 shadow-lg"}`}
-                    >
-                      <h3
-                        className={`text-sm sm:text-base md:text-lg font-bold mb-3 sm:mb-4 ${theme === "dark" ? "text-white" : "text-gray-900"}`}
-                      >
-                        Last 50 Digits Chart
-                      </h3>
+                    <div className="mt-5 border-t border-white/10 pt-5">
+                      <h3 className={`mb-3 text-sm sm:text-base md:text-lg font-bold ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Last 50 Digits Chart</h3>
                       <LastDigitsChart digits={recent50Digits} />
                     </div>
+                  </div>
                   </div>
                 )}
 
